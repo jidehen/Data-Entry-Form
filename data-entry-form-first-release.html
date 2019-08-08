@@ -734,13 +734,15 @@
 						for (var col = 0; col < data.head.vars.length; col++) { // for each column
 							var headCell = headRow.insertCell(col); // inserts new cell at position i in thead
 							headCell.innerHTML = "<b>" + data.head.vars[col] + "</b>"; // adds bold text to thead cell
-							for (i in bindings) {
-								var binding = bindings[i];
-								var bodyRow = table.insertRow(-1); // create new row
-								for (n in binding) {
-									var bodyCell = bodyRow.insertCell(n); // create new cell in row
-									bodyCell.innerHTML = tableFormat(binding[n].value); // set value of cell
-								}
+							}
+						for (i in bindings) {
+							var curr = 0 ; // curr is used to keep track of correct cell position
+							var binding = bindings[i];
+							var bodyRow = table.insertRow(-1); // create new row
+							for (n in binding) {
+								var bodyCell = bodyRow.insertCell(curr); // create new cell in row
+								bodyCell.innerHTML = tableFormat(binding[n].value); // set value of cell
+								curr += 1 ;
 							}
 						}
 		            }	

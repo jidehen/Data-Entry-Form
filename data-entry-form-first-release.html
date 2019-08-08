@@ -65,7 +65,7 @@
 		  					<!-- Start Buttons -->
 		  					<div class=button-wrapper>
 		  					<span>
-							<button id="clearBtnID" type="button" onclick="clearDBMS()" class="btn btn-primary">Clear</button>
+							<button id="clearBtnID" type="button" onclick="clearInput()" class="btn btn-primary">Clear</button>
 		  					<button id="insertBtnID" type="button" onclick="recordGen()" class="btn btn-success">Add</button> 
 		  					<button id="deleteBtnID" type="button" onclick="recordDel()" class="btn btn-danger">Delete</button> 
 		  					<button id="queryBtnID" type="button" onclick="queryGen()" class="btn btn-warning">Query</button> 
@@ -138,7 +138,7 @@
 		  					<!-- Start Buttons -->
 		  					<div class=button-wrapper>
 		  					<span>
-							<button id="clearBtnID" type="button" onclick="clearfs()" class="btn btn-primary">Clear</button>
+							<button id="clearBtnID" type="button" onclick="clearInput()" class="btn btn-primary">Clear</button>
 							<button id="turtleBtnID2" type="button" onclick="turtleGen()" class="btn btn-success">Add</button>
 							<button id="turtleBtnID2" type="button" onclick="turtleDel()" class="btn btn-danger">Delete</button>
 		  					<button id="queryBtnID2" type="button" onclick="queryGen()" class="btn btn-warning">Query</button> 
@@ -239,17 +239,22 @@
 				document.getElementById("docNameID2").value = solid_storage_value ;	
 			}
 		}
-
-		// Clears dbms form
-		function clearDBMS() {
-			document.getElementById("dbmsFormID").reset();
-			docNameValue() ;
-		}
-	
-		// Clears file system form
-		function clearfs() {
-			document.getElementById("fsFormID").reset();
-			docNameValue() ;
+		
+		// Clears subject, predicate, object input fields
+		function clearInput() {
+			if (document.getElementById('dbmsTabID').getAttribute('class') == "active"){
+				var curDocName = document.getElementById("docNameID").value ; // Stores current value of docName
+				var curEndpoint = document.getElementById("endpointID").value ; // Stores current value of endpoint
+				document.getElementById("dbmsFormID").reset(); // Resets entire form
+				document.getElementById("docNameID").value = curDocName ; // Added so docname is not reset
+				document.getElementById("endpointID").value = curEndpoint ; // Added so endpoint is not reset
+			} else if (document.getElementById('fsTabID').getAttribute('class') == "active"){
+				var curDocName = document.getElementById("docNameID2").value ;
+				var curEndpoint = document.getElementById("endpointID2").value ;
+				document.getElementById("fsFormID").reset();
+				document.getElementById("docNameID2").value = curDocName ;
+				document.getElementById("endpointID2").value = curEndpoint ;
+			}
 		}
 	
 		// This function checks which tab the user is in to determine focus of functions

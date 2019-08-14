@@ -23,6 +23,22 @@
 	  <ul class="nav nav-tabs">
 	    <li class="active" id="dbmsTabID"><a data-toggle="tab" href="#dbmsID">DBMS</a></li>
 	    <li id="fsTabID"><a data-toggle="tab" href="#fsID">File System</a></li>
+		<!-- Start Drpdown -->
+		<li class="dropdown">
+		    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Settings
+		    <span class="caret"></span></a>
+		    <ul class="dropdown-menu">
+			  <!-- Faceted Browser Links Checkbox  -->
+			  <div class="checkbox">
+			    <label><input id="fctID" type="checkbox" value="" checked>Faceted Browser Links</label>
+			  </div>
+			  <!-- Full URI Query Results 2 -->
+			  <div class="checkbox">
+			    <label><input id="uriID" type="checkbox" value="">Hide Full URIs</label>
+			  </div>
+		    </ul>
+		  </li>
+		  <!-- End Dropdown -->
 	  </ul>
 	  <!-- End of tabs menu -->
   
@@ -595,9 +611,24 @@
 			else {
 				return str
 			}
-
 		}
-	
+		
+		// //This function allows faceted browser link results to be shown on the page.
+		// function fctResults(table) {
+		// 	const hrefExp = /<a href="(.*?)"/g ; // regexp used to extract url's in preecxisting hrefs
+		//
+		// 	for (var row = 1; row < document.getElementById(table).rows.length; row++) { // for each row (not including header)
+		// 		for (var col = 0; col < document.getElementById(table).rows[0].cells.length; col++) { //for each cell in each row
+		// 			var currentHTML = document.getElementById(table).rows[row].cells[col].innerHTML ;
+		// 			if (currentHTML.match(hrefExp)){ // if currentHTML is an href
+		// 				var xpathResult = document.evaluate('//a/@href', document, null, XPathResult.ANY_TYPE, null);
+		// 				console.log("XPATH: " + xpathResult);
+		// 			}
+		// 			var fctHTML = '<a href="' + "http://linkeddata.uriburner.com/describe/?url=" + currentHTML + '">' + currentHTML + '</a>' ;
+		// 			document.getElementById(table).rows[row].cells[col].innerHTML = fctHTML ;
+		// 		}
+		// 	}
+		// }
 		// This function is used to referesh the table when view data is clicked
 		function refreshTable() {
 			var table = tabCheckTable("dbmsTableID", "fsTableID") ;
@@ -873,10 +904,17 @@
 		            if (data.results.bindings.length > 0){
 						var table = tabCheckTable("dbmsTableID", "fsTableID") ;
 						var object = nonvalidatedObject() ;
-						for (var i = 0; i < data.results.bindings.length; i++) {	
-							subject = data.results.bindings[i].subject.value ;
-							predicate = data.results.bindings[i].predicate.value ;
-							object = data.results.bindings[i].object.value ;	
+						for (var i = 0; i < data.results.bindings.length; i++) {
+							if (document.getElementById("fctID").checked == true) { //if fct checkbox is checked
+								subject = "http://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].subject.value ;
+								predicate = "http://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].predicate.value ;
+								object = "http://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].object.value ;
+							} else {
+								subject = data.results.bindings[i].subject.value ;
+								predicate = data.results.bindings[i].predicate.value ;
+								object = data.results.bindings[i].object.value ;
+							}
+								
 
 							var row = table.insertRow(-1);
 						    var cell1 = row.insertCell(0);
@@ -941,10 +979,16 @@
 					var table = tabCheckTable("dbmsTableID", "fsTableID") ;
 					
 		            if (data.results.bindings.length > 0){
-						for (var i = 0; i < data.results.bindings.length; i++) {	
-							subject = data.results.bindings[i].subject.value ;
-							predicate = data.results.bindings[i].predicate.value ;
-							object = data.results.bindings[i].object.value ;	
+						for (var i = 0; i < data.results.bindings.length; i++) {					
+							if (document.getElementById("fctID").checked == true) { //if fct checkbox is checked
+								subject = "http://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].subject.value ;
+								predicate = "http://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].predicate.value ;
+								object = "http://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].object.value ;
+							} else {
+								subject = data.results.bindings[i].subject.value ;
+								predicate = data.results.bindings[i].predicate.value ;
+								object = data.results.bindings[i].object.value ;
+							}	
 				
 							var row = table.insertRow(-1);
 						    var cell1 = row.insertCell(0);
@@ -955,6 +999,7 @@
 						    cell2.innerHTML = tableFormat(predicate);
 						    cell3.innerHTML = tableFormat(object);	
 						}
+						// fctResults(table.id) ;
 						hideSpinner() ;
 		            } else{
 						hideSpinner() ;

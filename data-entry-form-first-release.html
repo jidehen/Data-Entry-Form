@@ -32,6 +32,10 @@
 			  <div class="checkbox">
 			    <label><input id="fctID" type="checkbox" value="" checked>Faceted Browser Links</label>
 			  </div>
+			  <!-- Console Print Commands Checkbox  -->
+			  <div class="checkbox">
+			    <label><input id="cmdID" type="checkbox" value="" checked>Console Log Commands</label>
+			  </div>
 			  <!-- Full URI Query Results 2 
 			  <div class="checkbox">
 			    <label><input id="uriID" type="checkbox" value="">Hide Full URIs</label>
@@ -664,9 +668,12 @@
 			
 			var endpoint = document.getElementById("endpointID").value ;
 	        let url = endpoint ;
-
-	        console.log("endpoint for Target SPARUL Service: " + endpoint);
-	        console.log(insert_cmd);
+			
+			if (document.getElementById("cmdID").checked == true) {
+		        console.log("endpoint for Target SPARUL Service: " + endpoint);
+		        console.log(insert_cmd);	
+			}
+			
 	        const options = {
 	                            method: 'POST',
 	                            headers: {
@@ -715,9 +722,12 @@
 
             var endpoint = document.getElementById("endpointID").value ;
             let url = endpoint ;
-
-            console.log("endpoint for Target SPARUL Service: " + endpoint);
-            console.log(delete_cmd);
+			
+			if (document.getElementById("cmdID").checked == true) {
+	            console.log("endpoint for Target SPARUL Service: " + endpoint);
+	            console.log(delete_cmd);
+			}
+            
             const options = {
                                 method: 'POST',
                                 headers: {
@@ -775,9 +785,11 @@
 			var endpoint = tabCheck("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;
 	        let url = endpoint + encodeURIComponent(query) + "&should-sponge=&format=application%2Fsparql-results%2Bjson" ;
 			
-	        console.log("SPARQL Query: " + query);
-			console.log("Query URL: " + url)
-		
+			if (document.getElementById("cmdID").checked == true) {
+		        console.log("SPARQL Query: " + query);
+				console.log("Query URL: " + url)
+			}
+	        
 	        const options = {
 	                            method: 'GET',
 	                            headers: {
@@ -864,9 +876,11 @@
 			
 			var endpoint = tabCheck("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;
 	        let url = endpoint + encodeURIComponent(query) + "&should-sponge=&format=application%2Fsparql-results%2Bjson" ;
-
-	        console.log("SPARQL Query: " + query);
-			console.log("Query URL: " + url)
+			
+			if (document.getElementById("cmdID").checked == true) {
+		        console.log("SPARQL Query: " + query);
+				console.log("Query URL: " + url);
+			}
 		
 	        const options = {
 	                            method: 'GET',
@@ -941,7 +955,11 @@
             var endpoint = tabCheck("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;
 	        let url = endpoint + encodeURIComponent(data_query) + "&should-sponge=&format=application%2Fsparql-results%2Bjson" ;
 
-	        console.log("Retrieving Table Data From: " + url);
+			if (document.getElementById("cmdID").checked == true) {
+		        console.log("Retrieving Table Data From: " + url);
+				console.log("Query: " + data_query);
+			}
+	        
 		
 	        const options = {
 	                            method: 'GET',
@@ -1014,7 +1032,11 @@
 			// This sets the url for retrieving the json
 	        let url = endpoint + encodeURIComponent(range_query) + "&should-sponge=&format=application%2Fsparql-results%2Bjson" ; 
 
-	        console.log("Recieving Predicate Range From: " + url);
+			if (document.getElementById("cmdID").checked == true) {
+		        console.log("Recieving Predicate Range From: " + url);
+				console.log("Query" + range_query);
+			}
+	        
 		
 	        const options = {
 	                            method: 'GET',
@@ -1053,8 +1075,11 @@
 			"" + "INSERT DATA {@prefix : <" + docName + "#> ." + ' ' + subject + ' ' + predicate + ' ' + object + ' ' + ".}" + ""
 			
 			let url = docName ;
-
-	        console.log("Fetch Command:" + turtle_cmd);
+			
+			if (document.getElementById("fctID").checked == true) {
+				console.log("Insert Command:" + turtle_cmd);	
+			}
+	        
 		
 	        const options = {
 	                            method: 'PATCH',
@@ -1095,8 +1120,10 @@
 			"" + "PREFIX : <" + docName + "#> DELETE DATA" + ' ' + "{" + subject + ' ' + predicate + ' ' + object + ' ' + ".}" + ""
 		
 			let url = docName ;
-
-	        console.log("Fetch Command:" + del_cmd);
+			if (document.getElementById("fctID").checked == true) {
+				console.log("Delete Command:" + del_cmd);	
+			}
+	        
 		
 	        const options = {
 	                            method: 'PATCH',

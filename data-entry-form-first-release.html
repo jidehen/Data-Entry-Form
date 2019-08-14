@@ -23,6 +23,23 @@
 	  <ul class="nav nav-tabs">
 	    <li class="active" id="dbmsTabID"><a data-toggle="tab" href="#dbmsID">DBMS</a></li>
 	    <li id="fsTabID"><a data-toggle="tab" href="#fsID">File System</a></li>
+		<!-- Start Drpdown -->
+		<li class="dropdown">
+		    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Settings
+		    <span class="caret"></span></a>
+		    <ul class="dropdown-menu">
+			  <!-- Faceted Browser Links Checkbox  -->
+			  <div class="checkbox">
+			    <label><input id="fctID" type="checkbox" value="" checked>Faceted Browser Links</label>
+			  </div>
+			  <!-- Full URI Query Results 2 
+			  <div class="checkbox">
+			    <label><input id="uriID" type="checkbox" value="">Hide Full URIs</label>
+			  </div>
+			  -->
+		    </ul>
+		  </li>
+		  <!-- End Dropdown -->
 	  </ul>
 	  <!-- End of tabs menu -->
   
@@ -595,9 +612,8 @@
 			else {
 				return str
 			}
-
 		}
-	
+		
 		// This function is used to referesh the table when view data is clicked
 		function refreshTable() {
 			var table = tabCheckTable("dbmsTableID", "fsTableID") ;
@@ -873,10 +889,17 @@
 		            if (data.results.bindings.length > 0){
 						var table = tabCheckTable("dbmsTableID", "fsTableID") ;
 						var object = nonvalidatedObject() ;
-						for (var i = 0; i < data.results.bindings.length; i++) {	
-							subject = data.results.bindings[i].subject.value ;
-							predicate = data.results.bindings[i].predicate.value ;
-							object = data.results.bindings[i].object.value ;	
+						for (var i = 0; i < data.results.bindings.length; i++) {
+							if (document.getElementById("fctID").checked == true) { //if fct checkbox is checked
+								subject = "http://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].subject.value ;
+								predicate = "http://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].predicate.value ;
+								object = "http://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].object.value ;
+							} else {
+								subject = data.results.bindings[i].subject.value ;
+								predicate = data.results.bindings[i].predicate.value ;
+								object = data.results.bindings[i].object.value ;
+							}
+								
 
 							var row = table.insertRow(-1);
 						    var cell1 = row.insertCell(0);
@@ -941,10 +964,16 @@
 					var table = tabCheckTable("dbmsTableID", "fsTableID") ;
 					
 		            if (data.results.bindings.length > 0){
-						for (var i = 0; i < data.results.bindings.length; i++) {	
-							subject = data.results.bindings[i].subject.value ;
-							predicate = data.results.bindings[i].predicate.value ;
-							object = data.results.bindings[i].object.value ;	
+						for (var i = 0; i < data.results.bindings.length; i++) {					
+							if (document.getElementById("fctID").checked == true) { //if fct checkbox is checked
+								subject = "http://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].subject.value ;
+								predicate = "http://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].predicate.value ;
+								object = "http://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].object.value ;
+							} else {
+								subject = data.results.bindings[i].subject.value ;
+								predicate = data.results.bindings[i].predicate.value ;
+								object = data.results.bindings[i].object.value ;
+							}	
 				
 							var row = table.insertRow(-1);
 						    var cell1 = row.insertCell(0);

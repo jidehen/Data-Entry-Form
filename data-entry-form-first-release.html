@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html lang="en">
 	<head>
 		<title> Basic Data Entry Form </title>
 		<!-- Latest compiled and minified CSS -->
@@ -30,17 +29,17 @@
 		    <ul class="dropdown-menu">
 			  <!-- Faceted Browser Links Checkbox  -->
 			  <div class="checkbox">
-			    <label><input id="fctID" type="checkbox" value="" checked>Faceted Browser Links</label>
+			    <label><input id="fctID" type="checkbox" value="">Faceted Browser Links</label>
+			  </div>
+			  <!-- Full URI Query Results -->
+			  <div class="checkbox">
+			    <label><input id="uriID" type="checkbox" value="">Shortened URI Results</label>
 			  </div>
 			  <!-- Console Print Commands Checkbox  -->
 			  <div class="checkbox">
-			    <label><input id="cmdID" type="checkbox" value="" checked>Console Log Commands</label>
+			    <label><input id="cmdID" type="checkbox" value="">Console Log Commands</label>
 			  </div>
-			  <!-- Full URI Query Results 2 
-			  <div class="checkbox">
-			    <label><input id="uriID" type="checkbox" value="">Hide Full URIs</label>
-			  </div>
-			  -->
+
 		    </ul>
 		  </li>
 		  <!-- End Dropdown -->
@@ -905,9 +904,12 @@
 						var object = nonvalidatedObject() ;
 						for (var i = 0; i < data.results.bindings.length; i++) {
 							if (document.getElementById("fctID").checked == true) { //if fct checkbox is checked
-								subject = "http://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].subject.value ;
-								predicate = "http://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].predicate.value ;
-								object = "http://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].object.value ;
+								subject = "https://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].subject.value ;
+								subject = subject.replace("#", "%23");
+								predicate = "https://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].predicate.value ;
+								predicate = predicate.replace("#", "%23");
+								object = "https://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].object.value ;
+								object = object.replace("#", "%23");
 							} else {
 								subject = data.results.bindings[i].subject.value ;
 								predicate = data.results.bindings[i].predicate.value ;
@@ -984,9 +986,12 @@
 		            if (data.results.bindings.length > 0){
 						for (var i = 0; i < data.results.bindings.length; i++) {					
 							if (document.getElementById("fctID").checked == true) { //if fct checkbox is checked
-								subject = "http://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].subject.value ;
-								predicate = "http://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].predicate.value ;
-								object = "http://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].object.value ;
+								subject = "https://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].subject.value ;
+								subject = subject.replace("#", "%23");
+								predicate = "https://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].predicate.value ;
+								predicate = predicate.replace("#", "%23");
+								object = "https://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].object.value ;
+								object = object.replace("#", "%23");
 							} else {
 								subject = data.results.bindings[i].subject.value ;
 								predicate = data.results.bindings[i].predicate.value ;

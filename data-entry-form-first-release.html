@@ -23,7 +23,7 @@
 	  <ul class="nav nav-tabs">
 	    <li class="active" id="dbmsTabID"><a data-toggle="tab" href="#dbmsID">DBMS</a></li>
 	    <li id="fsTabID"><a data-toggle="tab" href="#fsID">File System</a></li>
-		<!-- Start Drpdown -->
+		<!-- Start Dropdown -->
 		<li class="pull-right" class="dropdown">
 		    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Settings
 		    <span class="caret"></span></a>
@@ -47,6 +47,7 @@
 		    </ul>
 		  </li>
 		  <!-- End Dropdown -->
+		  <li class="pull-right"> <button id="loginID" style="margin-top: 5px" type="button" onclick="authLogin()" class="hidden btn btn-primary">Login</button> </li>
 	  </ul>
 	  <!-- End of tabs menu -->
   
@@ -99,7 +100,6 @@
 							<!-- Start Authentication Buttons -->
 							<br/>
 							<div class="button-wrapper">
-							<button id="loginID" type="button" onclick="authLogin()" class="hidden btn btn-primary">Login</button> 
 							<button id="logoutID" type="button" onclick="authLogout()" class="hidden btn btn-danger">Logout</button> 
 			                <span>&nbsp&nbsp</span>
 							<a id="logged-href" href="" title="" class="hidden"><img id="uid-icon" src="./common/uid.png"></a>
@@ -951,11 +951,9 @@
 								}
 								
 								if (object.includes(graph) || regexp.test(object)) {
-									console.log("Object is not literal: " + object)
 									object = "https://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].object.value ;
 									object = object.replace("#", "%23");
 								} else { //if object is literal value
-									console.log("Object is a literal value: " + object)
 									object = data.results.bindings[i].object.value ;
 								}
 								

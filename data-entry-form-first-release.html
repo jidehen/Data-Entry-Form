@@ -21,8 +21,9 @@
 	<div class="container">
 	  <!-- Create tabs menu -->
 	  <ul class="nav nav-tabs">
-	    <li class="active" id="dbmsTabID"><a data-toggle="tab" href="#dbmsID">DBMS</a></li>
-	    <li id="fsTabID"><a data-toggle="tab" href="#fsID">File System</a></li>
+		<li class="active" id="fsTabID"><a data-toggle="tab" href="#fsID">File System</a></li>
+	    <li id="dbmsTabID"><a data-toggle="tab" href="#dbmsID">DBMS</a></li>
+		<li id="aboutTabID"><a data-toggle="tab" href="#aboutID">About</a></li>
 		<!-- Start Dropdown -->
 		<li class="pull-right" class="dropdown">
 		    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Settings
@@ -48,13 +49,14 @@
 		  </li>
 		  <!-- End Dropdown -->
 		  <li class="pull-right"> <button id="loginID" style="margin-top: 5px" type="button" onclick="authLogin()" class="hidden btn btn-primary">Login</button> </li>
+		  <li class="pull-right"><button id="logoutID" style="margin-top: 5px" type="button" onclick="authLogout()" class="hidden btn btn-danger">Logout</button></li>
 	  </ul>
 	  <!-- End of tabs menu -->
   
 	  <!-- Add content to the tabs-->
 	  <div class="tab-content">
 		<!-- Start DBMS Tab -->
-	    <div id="dbmsID" class="tab-pane fade in active">
+	    <div id="dbmsID" class="tab-pane fade">
 		  	<div class="container">
 		  	    <div class="row">
 			  		<!-- Form Div (Left Side) -->
@@ -95,16 +97,9 @@
 		  					<button id="deleteBtnID" type="button" onclick="recordDel()" class="btn btn-danger">Delete</button> 
 		  					<button id="queryBtnID" type="button" onclick="queryGen()" class="btn btn-warning">Query</button> 
 		  					<button id="dataBtnID" type="button" onclick="updateTable()" class="btn btn-info">All Data</button>
+							<a id="logged-href" href="" title="" class="hidden"><img id="uid-icon" src="./common/uid.png"></a>
 							</span>
 		  					</div>
-							<!-- Start Authentication Buttons -->
-							<br/>
-							<div class="button-wrapper">
-							<button id="logoutID" type="button" onclick="authLogout()" class="hidden btn btn-danger">Logout</button> 
-			                <span>&nbsp&nbsp</span>
-							<a id="logged-href" href="" title="" class="hidden"><img id="uid-icon" src="./common/uid.png"></a>
-							</div>
-							<!-- End Authentication Buttons -->
 		  					<!-- End Buttons -->
 		  				</form>
 		  				<!-- End of Form Div -->
@@ -126,7 +121,7 @@
 		<!-- End DBMS Tab -->
 		
 		<!-- Start File System Tab -->
-	    <div id="fsID" class="tab-pane fade">
+	    <div id="fsID" class="tab-pane fade in active">
 		  	<div class="container">
 		  	    <div class="row">
 		  			<!-- Form Div (Left Side) -->
@@ -167,6 +162,7 @@
 							<button id="turtleBtnID2" type="button" onclick="turtleDel()" class="btn btn-danger">Delete</button>
 		  					<button id="queryBtnID2" type="button" onclick="queryGen()" class="btn btn-warning">Query</button> 
 		  					<button id="dataBtnID2" type="button" onclick="updateTable()" class="btn btn-info">All Data</button>
+							<a id="logged-href1" href="" title="" class="hidden"><img id="uid-icon" src="./common/uid.png"></a>
 		  				    </span>
 		  					</div>
 		  					<!-- End Buttons -->
@@ -188,6 +184,12 @@
 		  	</div>
 	    </div>
 		<!-- End File System Tab -->
+		<!-- Start About Tab -->
+	    <div id="aboutID" class="tab-pane fade">
+		  	<div class="container">
+				<p style="padding-top: 10px"> Version Number: 5.0.4 </p>
+			</div>
+		<!-- End About Tab -->
 	  </div>
 	<!-- End of tabs container -->
 	</div>
@@ -279,6 +281,7 @@
 
 		  solid.auth.trackSession(async (session) => {
 	              const loggedHref = document.getElementById('logged-href')
+			  	  const loggedHref1 = document.getElementById('logged-href1')
 	              const loggedIn = !!session
 	              loginButton.classList.toggle('hidden', loggedIn)
 	              logoutButton.classList.toggle('hidden', !loggedIn)
@@ -287,6 +290,9 @@
 	                  loggedHref.classList.remove('hidden')
 	                  loggedHref.href = session.webId
 	                  loggedHref.title = session.webId
+	                  loggedHref1.classList.remove('hidden')
+	                  loggedHref1.href = session.webId
+	                  loggedHref1.title = session.webId
 
 	                  solid_storage = await fetchProfile(session.webId);
 	                  sessionStorage.setItem('solid_storage', solid_storage);
@@ -296,6 +302,9 @@
 	                loggedHref.classList.add('hidden')
 	                loggedHref.href = ''
 	                loggedHref.title = ''
+	                loggedHref1.classList.add('hidden')
+	                loggedHref1.href = ''
+	                loggedHref1.title = ''
 	                solid_storage = null;
 	                sessionStorage.removeItem('solid_storage');
 	              }

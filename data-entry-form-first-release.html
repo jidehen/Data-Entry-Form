@@ -24,7 +24,7 @@
 	    <li class="active" id="dbmsTabID"><a data-toggle="tab" href="#dbmsID">DBMS</a></li>
 	    <li id="fsTabID"><a data-toggle="tab" href="#fsID">File System</a></li>
 		<!-- Start Drpdown -->
-		<li class="dropdown">
+		<li class="pull-right" class="dropdown">
 		    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Settings
 		    <span class="caret"></span></a>
 		    <ul class="dropdown-menu">
@@ -44,7 +44,6 @@
 			  <div class="checkbox">
 			    <label><input id="cmdID" type="checkbox" value="">Console Log Commands</label>
 			  </div>
-
 		    </ul>
 		  </li>
 		  <!-- End Dropdown -->
@@ -213,7 +212,6 @@
 	
 	<!-- Spinner CSS -->
 	<style>
-		
 		#spinner{
 		    position:fixed;
 		    width:100%;
@@ -244,6 +242,13 @@
 		    border-radius:50%;
 		    -webkit-animation: spin .8s linear infinite;
 		    animation: spin .8s linear infinite;
+		}
+	</style>
+	
+	<!-- Dropdown menu CSS-->
+	<style>
+		.dropdown-menu {
+		   padding-left: 15px;
 		}
 	</style>
 	
@@ -373,7 +378,7 @@
 	<!-- These Functions Handle the Form Validation -->
 	<script>
 		// Regular Expression for URIs
-		const regexp = /(https|http|mailto|tel|dav|ftp|ftps)[:^/s]/i;
+		const regexp = /(https|http|mailto|tel|dav|ftp|ftps|urn)[:^/s]/i;
 
 		// This function validates the uri used for PATCH
 		document.getElementById("docNameID2").addEventListener("input", docNameValidation);
@@ -615,6 +620,8 @@
 	
 		// This function allows hyperlinks to be used in the table
 		function tableFormat(str) {
+			// Regular Expression for URIs in table specifically
+			const tableexp = /(https|http|mailto|tel|dav|ftp|ftps)[:^/s]/i;
 			var graph = tabCheck("docNameID", "docNameID2") ;
 			var strLabel = str ; // variable for what is show on screen in the href
 			
@@ -628,9 +635,7 @@
 				}
 			} 
 			
-			if (str.substring(0, 6).includes("urn:")) { //if str is urn scheme is does not resolve. substring is 1st 6 characters
-				return strLabel
-			} else if (regexp.test(str) || str.charAt(0) == "#") { // if str is an absolute or relative uri
+			if (tableexp.test(str)) { // if str is an absolute or relative uri
 				str = '<a href="' + str + '">' + strLabel + '</a>'
 				return str
 			}

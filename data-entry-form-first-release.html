@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="en">
 	<head>
 		<title> Basic Data Entry Form </title>
 		<!-- Latest compiled and minified CSS -->
@@ -608,12 +609,27 @@
 	
 		// This function allows hyperlinks to be used in the table
 		function tableFormat(str) {
-			if (regexp.test(str) || str.charAt(0) == "#") {
-				str = '<a href="' + str + '">' + str + '</a>'
+			var graph = tabCheck("docNameID", "docNameID2") ;
+			var strLabel = str ; // variable for what is show on screen in the href
+			
+			if (document.getElementById("uriID").checked == true) { //if user wants short URIs
+				if (str.includes(graph)) { //if str is in fct format it still includes the docname
+					strLabel = strLabel.replace(graph, ""); //remove the docName from string
+					if (str.includes("https://linkeddata.uriburner.com/describe/?url=")) {// of str is in fct format
+						strLabel = strLabel.replace("https://linkeddata.uriburner.com/describe/?url=", "");
+						strLabel = strLabel.replace("%23", "#");
+					}
+				}	
+			} 
+			
+			if (str.substring(0, 6).includes("urn:")) { //if str is urn scheme is does not resolve. substring is 1st 6 characters
+				return strLabel
+			} else if (regexp.test(str) || str.charAt(0) == "#") { // if str is an absolute or relative uri
+				str = '<a href="' + str + '">' + strLabel + '</a>'
 				return str
 			}
 			else {
-				return str
+				return strLabel
 			}
 		}
 		
@@ -987,7 +1003,7 @@
 						for (var i = 0; i < data.results.bindings.length; i++) {					
 							if (document.getElementById("fctID").checked == true) { //if fct checkbox is checked
 								subject = "https://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].subject.value ;
-								subject = subject.replace("#", "%23");
+								subject = subject.replace("#", "%23"); // replaces # with %23 for fct results
 								predicate = "https://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].predicate.value ;
 								predicate = predicate.replace("#", "%23");
 								object = "https://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].object.value ;
@@ -996,7 +1012,7 @@
 								subject = data.results.bindings[i].subject.value ;
 								predicate = data.results.bindings[i].predicate.value ;
 								object = data.results.bindings[i].object.value ;
-							}	
+							}
 				
 							var row = table.insertRow(-1);
 						    var cell1 = row.insertCell(0);

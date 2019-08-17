@@ -26,7 +26,7 @@
 		<li id="aboutTabID"><a data-toggle="tab" href="#aboutID">About</a></li>
 		<!-- Start Dropdown -->
 		<li class="pull-right" class="dropdown">
-		    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+		    <a class="dropdown-toggle" style="max-height: 10px" data-toggle="dropdown" href="#"> 
 			<span class="glyphicon glyphicon-cog"></span>
 		    <span class="caret"></span></a>
 			
@@ -189,7 +189,7 @@
 		<!-- Start About Tab -->
 	    <div id="aboutID" class="tab-pane fade">
 		  	<div class="container">
-				<p style="padding-top: 10px"> Generic SPARQL Data Entry Form 5.0.6 <br>
+				<p style="padding-top: 10px"> Generic SPARQL Data Entry Form 5.0.7 <br>
 					Description: Simple Data Entry Form that helps unravel the power of RDF and SPARQL with regards to Structured Data creation and interaction. <br> 
 					Creator: <a href="https://jordan.solid.openlinksw.com:8444/profile/card#me">Jordan Idehen</a> (<a href="https://github.com/jidehen#this">Github</a>, <a href="https://www.linkedin.com/in/jordan-idehen-143934157/#this">LinkedIn</a>) <br>
 					Supervisor: <a href="https://github.com/OpenLinkSoftware#this">OpenLink Software</a> 
@@ -495,6 +495,7 @@
 	
 		// If the subject is quoted or contains a space this function throws and error
 		document.getElementById("subjectID").addEventListener("input", validateSubject);
+		document.getElementById("subjectID2").addEventListener("input", validateSubject);
 		function validateSubject() {
 			var str = tabCheck("subjectID", "subjectID2") ;
 
@@ -570,6 +571,7 @@
 	
 		// If the predicate is quoted, contains, or is a blank node a space this function throws and error
 		document.getElementById("predicateID").addEventListener("input", validatePredicate);
+		document.getElementById("predicateID2").addEventListener("input", validatePredicate);
 		function validatePredicate() {
 			var str = tabCheck("predicateID", "predicateID2") ;
 		

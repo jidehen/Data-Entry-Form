@@ -2,7 +2,6 @@ Overview:
 A basic data entry form that allows data to be created, manipulated, deleted and viewed in a Database Management System or File System.
 
 VALID INPUT REQUIREMENTS:
-Notes 
 - Relative URIs (scoped to Document Name field value) are presumed for single word values entered into any of the input files.
 - CURIES are accepted, if targeting a Virtuoso instance based on the fact that it has preloaded namespaces per DBMS instance.
 
@@ -17,7 +16,7 @@ Subject Field Values
 Predicate Field Values
 - Must be a reference
 	- Accepted inputs: Absolute References, CURIES, URIs quoted withing <> as per RDF-Turtle
-	
+
 Object Field Values
 - References
 	- Default (as per Relative URIs comments above)

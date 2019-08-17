@@ -21,8 +21,8 @@
 	<div class="container">
 	  <!-- Create tabs menu -->
 	  <ul class="nav nav-tabs">
-		<li class="active" id="fsTabID"><a data-toggle="tab" href="#fsID">File System</a></li>
-	    <li id="dbmsTabID"><a data-toggle="tab" href="#dbmsID">DBMS</a></li>
+		<li class="active" id="dbmsTabID"><a data-toggle="tab" href="#dbmsID">DBMS</a></li>
+		<li id="fsTabID"><a data-toggle="tab" href="#fsID">File System</a></li>
 		<li id="aboutTabID"><a data-toggle="tab" href="#aboutID">About</a></li>
 		<!-- Start Dropdown -->
 		<li class="pull-right" class="dropdown">
@@ -60,7 +60,7 @@
 	  <!-- Add content to the tabs-->
 	  <div class="tab-content">
 		<!-- Start DBMS Tab -->
-	    <div id="dbmsID" class="tab-pane fade">
+	    <div id="dbmsID" class="tab-pane fade in active">
 		  	<div class="container">
 		  	    <div class="row">
 			  		<!-- Form Div (Left Side) -->
@@ -124,7 +124,7 @@
 		<!-- End DBMS Tab -->
 		
 		<!-- Start File System Tab -->
-	    <div id="fsID" class="tab-pane fade in active">
+	    <div id="fsID" class="tab-pane fade">
 		  	<div class="container">
 		  	    <div class="row">
 		  			<!-- Form Div (Left Side) -->
@@ -1132,7 +1132,6 @@
 						hideSpinner() ;
 		            } else{
 						hideSpinner() ;
-						throw new Error("No data returned by query") ;
 						console.log("No data returned by query");
 		            }
 				})	

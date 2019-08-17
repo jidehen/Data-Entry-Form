@@ -189,7 +189,7 @@
 		<!-- Start About Tab -->
 	    <div id="aboutID" class="tab-pane fade">
 		  	<div class="container">
-				<p style="padding-top: 10px"> Generic SPARQL Data Entry Form 5.0.5 <br>
+				<p style="padding-top: 10px"> Generic SPARQL Data Entry Form 5.0.6 <br>
 					Description: Simple Data Entry Form that helps unravel the power of RDF and SPARQL with regards to Structured Data creation and interaction. <br> 
 					Creator: <a href="https://jordan.solid.openlinksw.com:8444/profile/card#me">Jordan Idehen</a> (<a href="https://github.com/jidehen#this">Github</a>, <a href="https://www.linkedin.com/in/jordan-idehen-143934157/#this">LinkedIn</a>) <br>
 					Supervisor: <a href="https://github.com/OpenLinkSoftware#this">OpenLink Software</a> 
@@ -497,25 +497,46 @@
 		document.getElementById("subjectID").addEventListener("input", validateSubject);
 		function validateSubject() {
 			var str = tabCheck("subjectID", "subjectID2") ;
-		
-			try {
-				if (isBlankNode(str)) { // removes error message for complete blank node
-					errorMessage("subjectErrorID", "") ; 
-					removeInputColor('subjectID') ;
-					return formatSubject();
-				} else if (str.includes('"') || str.includes("'")) {
-					setInputColor("subjectID") ;
-					errorMessage("subjectErrorID", "Subject cannot contain a literal value unless it is a blank node") ; 
-					throw new Error("Subject cannot be a literal value"); // Throws error because input is a literal value
-				} else if (str.indexOf(' ') >= 0){
-					setInputColor('subjectID') ;
-					errorMessage("subjectErrorID", "Subject cannot contain spaces unless it is a blank node") ; 
-					throw new Error("Subject cannot contain spaces");
-				} 
-				else {
-					errorMessage("subjectErrorID", "") ; 
-					removeInputColor("subjectID") ;
-					return formatSubject(); // Returns formatted subject because it is valid
+
+			try {	
+				if (document.getElementById('dbmsTabID').getAttribute('class') == "active") { 
+					if (isBlankNode(str)) { // removes error message for complete blank node
+						errorMessage("subjectErrorID", "") ; 
+						removeInputColor('subjectID') ;
+						return formatSubject();
+					} else if (str.includes('"') || str.includes("'")) {
+						setInputColor("subjectID") ;
+						errorMessage("subjectErrorID", "Subject cannot contain a literal value unless it is a blank node") ; 
+						throw new Error("Subject cannot be a literal value"); // Throws error because input is a literal value
+					} else if (str.indexOf(' ') >= 0){
+						setInputColor('subjectID') ;
+						errorMessage("subjectErrorID", "Subject cannot contain spaces unless it is a blank node") ; 
+						throw new Error("Subject cannot contain spaces");
+					} 
+					else {
+						errorMessage("subjectErrorID", "") ; 
+						removeInputColor("subjectID") ;
+						return formatSubject(); // Returns formatted subject because it is valid
+					}
+				} else if (document.getElementById('fsTabID').getAttribute('class') == "active") {
+					if (isBlankNode(str)) { // removes error message for complete blank node
+						errorMessage("subjectErrorID2", "") ; 
+						removeInputColor('subjectID2') ;
+						return formatSubject();
+					} else if (str.includes('"') || str.includes("'")) {
+						setInputColor("subjectID2") ;
+						errorMessage("subjectErrorID2", "Subject cannot contain a literal value unless it is a blank node") ; 
+						throw new Error("Subject cannot be a literal value"); // Throws error because input is a literal value
+					} else if (str.indexOf(' ') >= 0){
+						setInputColor('subjectID2') ;
+						errorMessage("subjectErrorID2", "Subject cannot contain spaces unless it is a blank node") ; 
+						throw new Error("Subject cannot contain spaces");
+					} 
+					else {
+						errorMessage("subjectErrorID", "") ; 
+						removeInputColor("subjectID") ;
+						return formatSubject(); // Returns formatted subject because it is valid
+					}
 				}
 			} catch(e) {
 				console.error('Invalid Subject', e) ;
@@ -526,7 +547,6 @@
 		// This function formats the Predicate input. Comments are inline
 		function formatPredicate() {
 			var str = tabCheck("predicateID", "predicateID2") ;
-		
 			if (regexp.test(str) && !isBlankNode(str)) {
 				return '<' + str + '>' ; // Case: input is a uri. Solution: quote it
 			} else if (str.charAt(0) == "#") {
@@ -554,18 +574,34 @@
 			var str = tabCheck("predicateID", "predicateID2") ;
 		
 			try {
-				if (str.includes('"') || str.includes("'")) {
-					setInputColor('predicateID') ;
-					errorMessage("predicateErrorID", "Predicate cannot be a literal value") ;
-					throw new Error("Predicate cannot be a literal value"); // Throws error because input is a literal value
-				} else if (str.indexOf(' ') >= 0){
-					setInputColor('predicateID') ;
-					errorMessage("predicateErrorID", "Predicate cannot contain spaces") ; 
-					throw new Error("Predicate cannot contain spaces"); // Throws error because input subject can't contain spaces
-				} else {
-					removeInputColor('predicateID') ;
-					errorMessage("predicateErrorID", "") ; 
-					return formatPredicate(); // Returns formatted subject because it is valid
+				if (document.getElementById('dbmsTabID').getAttribute('class') == "active"){
+					if (str.includes('"') || str.includes("'")) {
+						setInputColor('predicateID') ;
+						errorMessage("predicateErrorID", "Predicate cannot be a literal value") ;
+						throw new Error("Predicate cannot be a literal value"); // Throws error because input is a literal value
+					} else if (str.indexOf(' ') >= 0){
+						setInputColor('predicateID') ;
+						errorMessage("predicateErrorID", "Predicate cannot contain spaces") ; 
+						throw new Error("Predicate cannot contain spaces"); // Throws error because input subject can't contain spaces
+					} else {
+						removeInputColor('predicateID') ;
+						errorMessage("predicateErrorID", "") ; 
+						return formatPredicate(); // Returns formatted subject because it is valid
+					}
+				} else if (document.getElementById('fsTabID').getAttribute('class') == "active"){
+					if (str.includes('"') || str.includes("'")) {
+						setInputColor('predicateID2') ;
+						errorMessage("predicateErrorID2", "Predicate cannot be a literal value") ;
+						throw new Error("Predicate cannot be a literal value"); // Throws error because input is a literal value
+					} else if (str.indexOf(' ') >= 0){
+						setInputColor('predicateID2') ;
+						errorMessage("predicateErrorID2", "Predicate cannot contain spaces") ; 
+						throw new Error("Predicate cannot contain spaces"); // Throws error because input subject can't contain spaces
+					} else {
+						removeInputColor('predicateID2') ;
+						errorMessage("predicateErrorID2", "") ; 
+						return formatPredicate(); // Returns formatted subject because it is valid
+					}
 				}
 			} catch(e) {
 				console.error('Invalid Predicate', e) ;
@@ -730,12 +766,13 @@
 					updateTable() ;
 					hideSpinner() ;
 				} else {
-					console.log("Error " + resp.status +" - " + resp.statusText) ;
+					throw new Error("Error " + resp.status +" - " + resp.statusText) ;
 					hideSpinner() ;
 				}
 			} catch(e) {
 				hideSpinner() ;
-				console.error('Insert Failed:', e) ;
+				console.error('Insert Failed', e) ;
+				alert('Insert Failed ' + e)
 			}			     
 		}
 	
@@ -784,12 +821,13 @@
 					hideSpinner() ;
 				}
 				else {
-					console.log("Error " + resp.status +" - " + resp.statusText) ;
+					throw new Error("Error " + resp.status +" - " + resp.statusText) ;
 					hideSpinner() ;
 				}	
 			} catch(e) {
 				hideSpinner() ;
-				console.error('Delete Failed:', e) ;
+				console.error('Delete Failed', e) ;
+				alert('Delete Failed ' + e)
 			}
 		
 	   	}
@@ -884,7 +922,8 @@
 				})
 			} catch(e) {
 				hideSpinner() ;
-				console.error('Query Failed:', e) ;
+				console.error('Query Failed', e) ;
+				alert('Query Failed ' + e)
 			}		   
 			
 		}
@@ -998,7 +1037,8 @@
 				})
 			} catch(e) {
 				hideSpinner() ;
-				console.error('Query Failed:', e) ;
+				console.error('Query Failed', e) ;
+				alert('Query Failed ' + e)
 			}		   
 		}
 	
@@ -1090,12 +1130,14 @@
 						hideSpinner() ;
 		            } else{
 						hideSpinner() ;
-						console.log("No data found by lookup");
+						throw new Error("No data returned by query") ;
+						console.log("No data returned by query");
 		            }
 				})	
 			} catch(e) {
 				hideSpinner() ;
-				console.error('Table Refresh Failed:', e) ;
+				console.error('Table Refresh Failed', e) ;
+				alert('Table Refresh Failed ' + e);
 			}		  
 	    }
 	
@@ -1139,12 +1181,13 @@
 				if (resp.status >= 200 && resp.status <= 300) {
 					console.log(resp.status + " - " + resp.statusText);
 				} else {
-					console.log("Error " + resp.status +" - " + resp.statusText) ;
+					throw new Error("Error " + resp.status +" - " + resp.statusText) ;
 				}
 				const json = await resp.json(); // constant awaits resp before being assigned (so it isn't assigned as a promise)
 				return (json.boolean) ; // returns true or false returned by query after awaiting results
 			} catch(e) {
-				console.error('Predicate Range Lookup Failed:', e) ;
+				console.error('Predicate Range Lookup Failed', e) ;
+				alert('Predicate Range Lookup Failed ' + e)
 			}		
 		
 		}
@@ -1186,11 +1229,12 @@
 				}
 				else {
 					hideSpinner() ;
-					console.log("Error " + resp.status +" - " + resp.statusText) ;
+					throw new Error("Error " + resp.status +" - " + resp.statusText) ;
 				}
 			} catch (e) {
 				hideSpinner() ;
-				console.error('Request Failed:', e) ;
+				console.error('Insert Failed ' + e) ;
+				alert('Insert Failed ' + e)
 			}			
 		}
 		
@@ -1230,11 +1274,12 @@
 				}
 				else {
 					hideSpinner() ;
-					console.log("Error " + resp.status +" - " + resp.statusText) ;
+					throw new Error("Error " + resp.status +" - " + resp.statusText) ;
 				}
 			} catch (e) {
 				hideSpinner() ;
-				console.error('Request Failed:', e) ;
+				console.error('Request Failed ' + e) ;
+				alert('Delete Failed ' + e)
 			}			
 		}
 	</script>
@@ -1270,8 +1315,9 @@
 
              return ret;
            } catch(e) {
-       	    console.error('Error:', e)
-       	    return null;
+			   console.error('Error', e)
+			   alert('Error ', e)
+			   return null;
            }
         }
 
@@ -1295,7 +1341,8 @@
                }
            } 
  	  catch(e) {
-       	      console.error('Request failed:', e)
+		  console.error('Request failed', e)
+		  alert('Request failed ', e)
            }
         }
 

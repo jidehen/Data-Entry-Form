@@ -26,8 +26,10 @@
 		<li id="aboutTabID"><a data-toggle="tab" href="#aboutID">About</a></li>
 		<!-- Start Dropdown -->
 		<li class="pull-right" class="dropdown">
-		    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Settings
+		    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+			<span class="glyphicon glyphicon-cog"></span>
 		    <span class="caret"></span></a>
+			
 		    <ul class="dropdown-menu">
 			  <!-- Faceted Browser Links Checkbox  -->
 			  <div class="checkbox">
@@ -48,8 +50,10 @@
 		    </ul>
 		  </li>
 		  <!-- End Dropdown -->
+		  <a id="logged-href" href="" title="" style="margin-top: 5px; margin-left: 15px;" class="pull-right" class="hidden"><img id="uid-icon" src="./common/uid.png"></a>
 		  <li class="pull-right"> <button id="loginID" style="margin-top: 5px" type="button" onclick="authLogin()" class="hidden btn btn-primary">Login</button> </li>
 		  <li class="pull-right"><button id="logoutID" style="margin-top: 5px" type="button" onclick="authLogout()" class="hidden btn btn-danger">Logout</button></li>
+		  
 	  </ul>
 	  <!-- End of tabs menu -->
   
@@ -97,7 +101,6 @@
 		  					<button id="deleteBtnID" type="button" onclick="recordDel()" class="btn btn-danger">Delete</button> 
 		  					<button id="queryBtnID" type="button" onclick="queryGen()" class="btn btn-warning">Query</button> 
 		  					<button id="dataBtnID" type="button" onclick="updateTable()" class="btn btn-info">All Data</button>
-							<a id="logged-href" href="" title="" class="hidden"><img id="uid-icon" src="./common/uid.png"></a>
 							</span>
 		  					</div>
 		  					<!-- End Buttons -->
@@ -162,7 +165,6 @@
 							<button id="turtleBtnID2" type="button" onclick="turtleDel()" class="btn btn-danger">Delete</button>
 		  					<button id="queryBtnID2" type="button" onclick="queryGen()" class="btn btn-warning">Query</button> 
 		  					<button id="dataBtnID2" type="button" onclick="updateTable()" class="btn btn-info">All Data</button>
-							<a id="logged-href1" href="" title="" class="hidden"><img id="uid-icon" src="./common/uid.png"></a>
 		  				    </span>
 		  					</div>
 		  					<!-- End Buttons -->
@@ -187,7 +189,12 @@
 		<!-- Start About Tab -->
 	    <div id="aboutID" class="tab-pane fade">
 		  	<div class="container">
-				<p style="padding-top: 10px"> Version Number: 5.0.4 </p>
+				<p style="padding-top: 10px"> Generic SPARQL Data Entry Form 5.0.5 <br>
+					Description: Simple Data Entry Form that helps unravel the power of RDF and SPARQL with regards to Structured Data creation and interaction. <br> 
+					Creator: <a href="https://jordan.solid.openlinksw.com:8444/profile/card#me">Jordan Idehen</a> (<a href="https://github.com/jidehen#this">Github</a>, <a href="https://www.linkedin.com/in/jordan-idehen-143934157/#this">LinkedIn</a>) <br>
+					Supervisor: <a href="https://github.com/OpenLinkSoftware#this">OpenLink Software</a> 
+					License: Public Domain  
+				</p>
 			</div>
 		<!-- End About Tab -->
 	  </div>
@@ -252,6 +259,9 @@
 		.dropdown-menu {
 		   padding-left: 15px;
 		}
+		.glyphicon.glyphicon-cog {
+		    font-size: 20px;
+		}
 	</style>
 	
 	<!-- Spinner Javascript -->
@@ -281,7 +291,6 @@
 
 		  solid.auth.trackSession(async (session) => {
 	              const loggedHref = document.getElementById('logged-href')
-			  	  const loggedHref1 = document.getElementById('logged-href1')
 	              const loggedIn = !!session
 	              loginButton.classList.toggle('hidden', loggedIn)
 	              logoutButton.classList.toggle('hidden', !loggedIn)
@@ -290,9 +299,6 @@
 	                  loggedHref.classList.remove('hidden')
 	                  loggedHref.href = session.webId
 	                  loggedHref.title = session.webId
-	                  loggedHref1.classList.remove('hidden')
-	                  loggedHref1.href = session.webId
-	                  loggedHref1.title = session.webId
 
 	                  solid_storage = await fetchProfile(session.webId);
 	                  sessionStorage.setItem('solid_storage', solid_storage);
@@ -302,9 +308,6 @@
 	                loggedHref.classList.add('hidden')
 	                loggedHref.href = ''
 	                loggedHref.title = ''
-	                loggedHref1.classList.add('hidden')
-	                loggedHref1.href = ''
-	                loggedHref1.title = ''
 	                solid_storage = null;
 	                sessionStorage.removeItem('solid_storage');
 	              }
@@ -948,6 +951,9 @@
 						var table = tabCheckTable("dbmsTableID", "fsTableID") ;
 						var object = nonvalidatedObject() ;
 						for (var i = 0; i < data.results.bindings.length; i++) {
+							var subject = data.results.bindings[i].subject.value ;
+							var predicate = data.results.bindings[i].predicate.value ;
+							var object = data.results.bindings[i].object.value ;
 							if (document.getElementById("fctID").checked == true) { //if fct checkbox is checked
 								if (subject.includes(graph) || regexp.test(subject)) { //if subject is not a literal value
 									subject = "https://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].subject.value ;

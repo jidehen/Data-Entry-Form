@@ -36,6 +36,10 @@
 			  <div class="checkbox">
 			    <label><input id="uriID" type="checkbox" value="">Shortened URI Results</label>
 			  </div>
+			  <!-- Reasoning and Inference -->
+			  <div class="checkbox">
+			    <label><input id="riID" type="checkbox" value="">Reasoning & Inference</label>
+			  </div>
 			  <!-- Console Print Commands Checkbox  -->
 			  <div class="checkbox">
 			    <label><input id="cmdID" type="checkbox" value="">Console Log Commands</label>
@@ -799,6 +803,11 @@
 				+ "WHERE {" + " " + subject + " " + predicate + " " + object + " " + "}"
 			}
 			
+			if (document.getElementById("riID").checked == true) {// if reasoning and inference is on
+				query = "define input:same-as" + '"yes" \n' + query ;
+			}
+			
+			
 			var endpoint = tabCheck("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;
 	        let url = endpoint + encodeURIComponent(query) + "&should-sponge=&format=application%2Fsparql-results%2Bjson" ;
 			
@@ -889,6 +898,10 @@
 				+ "SELECT DISTINCT" + " " + subject + " AS ?subject" + " " + predicate + " AS ?predicate" + " " + object + " AS ?object \n"
 				+ "FROM <" + graph + "> \n" 
 				+ "WHERE {" + " " + subject + " " + predicate + " " + object + " " + "}"
+			}
+			
+			if (document.getElementById("riID").checked == true) {// if reasoning and inference is on
+				query = "define input:same-as" + '"yes" \n' + query ;
 			}
 			
 			var endpoint = tabCheck("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;
@@ -983,6 +996,10 @@
 				// Use of Sponger Pragma to force document reload during query evaluation
 				var data_query = 
 				"DEFINE get:soft" + " " + '"soft"' + "\n" + "SELECT DISTINCT * FROM <" + graph + "> WHERE {?subject ?predicate ?object}"
+			}
+			
+			if (document.getElementById("riID").checked == true) {// if reasoning and inference is on
+				data_query = "define input:same-as" + '"yes" \n' + data_query ;
 			}
 
             var endpoint = tabCheck("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;

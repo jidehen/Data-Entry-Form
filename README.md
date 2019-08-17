@@ -3,8 +3,9 @@ A basic data entry form that allows data to be created, manipulated, deleted and
 
 VALID INPUT REQUIREMENTS:
 Notes 
-	- Relative URIs (scoped to Document Name field value) are presumed for single word values entered into any of the input files
-	- CURIES are accepted, if targeting a Virtuoso instance based on the fact that it has preloaded namespaces per DBMS instance
+- Relative URIs (scoped to Document Name field value) are presumed for single word values entered into any of the input files.
+- CURIES are accepted, if targeting a Virtuoso instance based on the fact that it has preloaded namespaces per DBMS instance.
+
 Subject Field Values
 - Must be a reference (uri) or blank node (cannot be a literal value)
 - References
@@ -18,7 +19,6 @@ Predicate Field Values
 	- Accepted inputs: Absolute References, CURIES, URIs quoted withing <> as per RDF-Turtle
 	
 Object Field Values
-
 - References
 	- Default (as per Relative URIs comments above)
 	- Accepted inputs: Absolute References, CURIES, URIs quoted withing <> as per RDF-Turtle

@@ -299,7 +299,9 @@
 		async function docNameValue() {
 			solid_storage = await sessionStorage.getItem("solid_storage")
 			var solid_storage_value = solid_storage + "mydata.ttl" ;
-			console.log('solid storage: ' + solid_storage); 
+			if (document.getElementById("cmdID").checked == true) {
+				console.log('solid storage: ' + solid_storage); 
+			}
 			
 			if (solid_storage == null) {
 				document.getElementById("docNameID").value = "urn:records:test" ;
@@ -447,7 +449,7 @@
 				var str = document.getElementById("subjectID2").value ;
 			}
 		
-			if (regexp.test(str)) {
+			if (regexp.test(str) && !isBlankNode(str)) {
 				return '<' + str + '>' ; // Case: input is a uri. Solution: quote it
 			} else if (str.charAt(0) == "#") {
 				return '<' + str + '>' ; // Case: input is an unquoted relative uri. Solution: quote it
@@ -504,7 +506,7 @@
 		function formatPredicate() {
 			var str = tabCheck("predicateID", "predicateID2") ;
 		
-			if (regexp.test(str)) {
+			if (regexp.test(str) && !isBlankNode(str)) {
 				return '<' + str + '>' ; // Case: input is a uri. Solution: quote it
 			} else if (str.charAt(0) == "#") {
 				return '<' + str + '>' ; // Case: input is an unquoted relative uri. Solution: quote it
@@ -559,7 +561,7 @@
 			}
 		
 			if (!range) {
-				if (regexp.test(str)) {
+				if (regexp.test(str) && !isBlankNode(str)) {
 					return '<' + str + '>' ; // Case: input is a uri. Solution: quote it
 				} else if (str.charAt(0) == "#") {
 					return '<' + str + '>' ; // Case: input is an unquoted relative uri. Solution: quote it
@@ -586,7 +588,7 @@
 		function nonvalidatedObject() {
 			var str = tabCheck("objectID", "objectID2") ;
 		
-			if (regexp.test(str)) {
+			if (regexp.test(str) && !isBlankNode(str)) {
 				return '<' + str + '>' ; // Case: input is a uri. Solution: quote it
 			} else if (str.charAt(0) == "#") {
 				return '<' + str + '>' ; // Case: input is an unquoted relative uri. Solution: quote it
@@ -920,12 +922,25 @@
 						var object = nonvalidatedObject() ;
 						for (var i = 0; i < data.results.bindings.length; i++) {
 							if (document.getElementById("fctID").checked == true) { //if fct checkbox is checked
-								subject = "https://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].subject.value ;
-								subject = subject.replace("#", "%23");
-								predicate = "https://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].predicate.value ;
-								predicate = predicate.replace("#", "%23");
-								object = "https://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].object.value ;
-								object = object.replace("#", "%23");
+								if (subject.includes(graph) || regexp.test(subject)) { //if subject is not a literal value
+									subject = "https://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].subject.value ;
+									subject = subject.replace("#", "%23"); // replaces # with %23 for fct results
+								}
+								
+								if (predicate.includes(graph) || regexp.test(predicate)) { //if subject is not a literal value
+									predicate = "https://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].predicate.value ;
+									predicate = predicate.replace("#", "%23");
+								}
+								
+								if (object.includes(graph) || regexp.test(object)) {
+									console.log("Object is not literal: " + object)
+									object = "https://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].object.value ;
+									object = object.replace("#", "%23");
+								} else { //if object is literal value
+									console.log("Object is a literal value: " + object)
+									object = data.results.bindings[i].object.value ;
+								}
+								
 							} else {
 								subject = data.results.bindings[i].subject.value ;
 								predicate = data.results.bindings[i].predicate.value ;
@@ -1000,14 +1015,28 @@
 					var table = tabCheckTable("dbmsTableID", "fsTableID") ;
 					
 		            if (data.results.bindings.length > 0){
-						for (var i = 0; i < data.results.bindings.length; i++) {					
+						for (var i = 0; i < data.results.bindings.length; i++) {	
+							var subject = data.results.bindings[i].subject.value ;
+							var predicate = data.results.bindings[i].predicate.value ;
+							var object = data.results.bindings[i].object.value ;				
 							if (document.getElementById("fctID").checked == true) { //if fct checkbox is checked
-								subject = "https://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].subject.value ;
-								subject = subject.replace("#", "%23"); // replaces # with %23 for fct results
-								predicate = "https://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].predicate.value ;
-								predicate = predicate.replace("#", "%23");
-								object = "https://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].object.value ;
-								object = object.replace("#", "%23");
+								if (subject.includes(graph) || regexp.test(subject)) { //if subject is not a literal value
+									subject = "https://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].subject.value ;
+									subject = subject.replace("#", "%23"); // replaces # with %23 for fct results
+								}
+								
+								if (predicate.includes(graph) || regexp.test(predicate)) { //if subject is not a literal value
+									predicate = "https://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].predicate.value ;
+									predicate = predicate.replace("#", "%23");
+								}
+								
+								if (object.includes(graph) || regexp.test(object)) {
+									object = "https://linkeddata.uriburner.com/describe/?url=" + data.results.bindings[i].object.value ;
+									object = object.replace("#", "%23");
+								} else { //if object is literal value
+									object = data.results.bindings[i].object.value ;
+								}
+								
 							} else {
 								subject = data.results.bindings[i].subject.value ;
 								predicate = data.results.bindings[i].predicate.value ;

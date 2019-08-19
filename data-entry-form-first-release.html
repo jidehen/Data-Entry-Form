@@ -43,6 +43,11 @@
 			  <div class="checkbox">
 			    <label><input id="riID" type="checkbox" value="">Reasoning & Inference</label>
 			  </div>
+			  <!-- Inference Rule Name -->
+			  <div class="checkbox">
+			    <label><input id="ruleNameID" type="checkbox" value="">Inference Rule</label> <br>
+				<input type="text" style="max-width: 130px" value="urn:ifp:inference:rule" id="infRuleNameID">
+			  </div>
 			  <!-- Console Print Commands Checkbox  -->
 			  <div class="checkbox">
 			    <label><input id="cmdID" type="checkbox" value="">Console Log Commands</label>
@@ -858,7 +863,9 @@
 			}
 			
 			if (document.getElementById("riID").checked == true) {// if reasoning and inference is on
-				query = "define input:same-as" + '"yes" \n' + query ;
+				query = "DEFINE input:same-as" + '"yes" \n' + query ;
+			} else if (document.getElementById("ruleNameID").checked == true) {
+				query = "DEFINE input:inference" + ' ' + "'" + document.getElementById("infRuleNameID").value + "'" + ' \n' + query ;
 			}
 			
 			
@@ -956,7 +963,9 @@
 			}
 			
 			if (document.getElementById("riID").checked == true) {// if reasoning and inference is on
-				query = "define input:same-as" + '"yes" \n' + query ;
+				query = "DEFINE input:same-as" + '"yes" \n' + query ;
+			} else if (document.getElementById("ruleNameID").checked == true) {
+				query = "DEFINE input:inference" + ' ' + "'" + document.getElementById("infRuleNameID").value + "'" + ' \n' + query ;
 			}
 			
 			var endpoint = tabCheck("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;
@@ -1056,7 +1065,9 @@
 			}
 			
 			if (document.getElementById("riID").checked == true) {// if reasoning and inference is on
-				data_query = "define input:same-as" + '"yes" \n' + data_query ;
+				data_query = "DEFINE input:same-as" + '"yes" \n' + data_query ;
+			} else if (document.getElementById("ruleNameID").checked == true) {
+				data_query = "DEFINE input:inference" + ' ' + "'" + document.getElementById("infRuleNameID").value + "'" + ' \n' + data_query ;
 			}
 
             var endpoint = tabCheck("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;

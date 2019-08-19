@@ -26,7 +26,7 @@
 		<li id="aboutTabID"><a data-toggle="tab" href="#aboutID">About</a></li>
 		<!-- Start Dropdown -->
 		<li class="pull-right" class="dropdown">
-		    <a class="dropdown-toggle" style="max-height: 10px" data-toggle="dropdown" href="#"> 
+		    <a class="dropdown-toggle" style="max-height: 40px" data-toggle="dropdown" href="#"> 
 			<span class="glyphicon glyphicon-cog"></span>
 		    <span class="caret"></span></a>
 			
@@ -189,7 +189,7 @@
 		<!-- Start About Tab -->
 	    <div id="aboutID" class="tab-pane fade">
 		  	<div class="container">
-				<p style="padding-top: 10px"> Generic SPARQL Data Entry Form 5.0.7 <br>
+				<p style="padding-top: 10px"> Generic SPARQL Data Entry Form 1.0.2<br>
 					Description: Simple Data Entry Form that helps unravel the power of RDF and SPARQL with regards to Structured Data creation and interaction. <br> 
 					Creator: <a href="https://jordan.solid.openlinksw.com:8444/profile/card#me">Jordan Idehen</a> (<a href="https://github.com/jidehen#this">Github</a>, <a href="https://www.linkedin.com/in/jordan-idehen-143934157/#this">LinkedIn</a>) <br>
 					Supervisor: <a href="https://github.com/OpenLinkSoftware#this">OpenLink Software</a> 
@@ -469,8 +469,10 @@
 			} else if (document.getElementById('fsTabID').getAttribute('class') == "active"){
 				var str = document.getElementById("subjectID2").value ;
 			}
-		
-			if (regexp.test(str) && !isBlankNode(str)) {
+			
+			if (str.charAt(0) == '<' && str.charAt(str.length-1) == '>') {
+				return str ;
+			} else if (regexp.test(str) && !isBlankNode(str)) {
 				return '<' + str + '>' ; // Case: input is a uri. Solution: quote it
 			} else if (str.charAt(0) == "#") {
 				return '<' + str + '>' ; // Case: input is an unquoted relative uri. Solution: quote it
@@ -482,10 +484,7 @@
 				return str ; // checks if input is a variable for deletion
 			}
 			else {
-				if (str.charAt(0) == '<' && str.charAt(str.length-1) == '>') {
-					var newStr = str.slice(1,-1); // Case: input is quoted uri. Solution: must be unquotted to be recognize as a uri by regexp
-					return formatSubject(newStr) ;
-				} else if (isBlankNode(str)) {
+				 if (isBlankNode(str)) {
 					return isBlankNode(str) ; // Case: input is a blank node. Solution: return it as is
 				} else {
 					return ':' + str ; // Case: input is not a uri or a blank node. Solution: make it a relative uri
@@ -611,7 +610,7 @@
 		}
 	
 		// This function formats the Object input. Comments are inline
-		async function validateObject() {
+		async function validateObject(str) {
 			var range = await predicateRange() ; // function waits until range is a value rather than a promise
 			var str = tabCheck("objectID", "objectID2") ;
 		
@@ -620,7 +619,10 @@
 			}
 		
 			if (!range) {
-				if (regexp.test(str) && !isBlankNode(str)) {
+				if (str.charAt(0) == '<' && str.charAt(str.length-1) == '>') { //Case: input is already qutoed uri. Return as is
+					return str
+				} else if (regexp.test(str) && !isBlankNode(str)) {
+					console.log("CASE 1 HIT")
 					return '<' + str + '>' ; // Case: input is a uri. Solution: quote it
 				} else if (str.charAt(0) == "#") {
 					return '<' + str + '>' ; // Case: input is an unquoted relative uri. Solution: quote it
@@ -630,12 +632,7 @@
 					return str; // Case: input is a curie. Solution: return it as is
 				} 
 				else {
-					if (str.charAt(0) == '<' && str.charAt(str.length-1) == '>') {
-						var newStr = str.slice(1,-1); // Case: input is quoted uri. Solution: must be unquotted to be recognize as a uri by regexp
-						return validateObject(newStr) ;
-					} else {
-						return ':' + str ; // Case: input is not a uri or a blank node. Solution: make it a relative uri
-					}
+					return ':' + str ; // Case: input is not a uri or a blank node. Solution: make it a relative uri
 		        }
 			} 
 			else {

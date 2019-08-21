@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -9,8 +10,9 @@
 		<!-- Latest compiled JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 		<!-- Authentication and RDF procssing library -->
-		<!-- (Old src) <script src="./common/js/solid-auth-client.bundle.js"></script> <script src="./common/js/rdflib.min.js"></script> -->
-		<script src="https://cdn.jsdelivr.net/npm/solid-auth-client@2.3.0/dist-lib/solid-auth-client.bundle.js"></script>
+		<script src="./common/js/solid-auth-client.bundle.js"></script> 
+	    <!-- <script src="https://cdn.jsdelivr.net/npm/solid-auth-client@2.3.0/dist-lib/solid-auth-client.bundle.js"></script> -->
+		<!-- <script src="./common/js/rdflib.min.js"></script> -->
 		<script src="https://cdn.jsdelivr.net/npm/rdflib@0.20.1/dist/rdflib.min.js"></script>
 	</head>
 
@@ -41,7 +43,7 @@
 			  </div>
 			  <!-- Reasoning and Inference -->
 			  <div class="checkbox">
-			    <label><input id="riID" type="checkbox" value="">Reasoning & Inference</label>
+			    <label><input id="riID" type="checkbox" value="">owl:sameAs Reasoning & Inference</label>
 			  </div>
 			  <!-- Inference Rule Name -->
 			  <div class="checkbox">
@@ -194,7 +196,7 @@
 		<!-- Start About Tab -->
 	    <div id="aboutID" class="tab-pane fade">
 		  	<div class="container">
-				<p style="padding-top: 10px"> Generic SPARQL Data Entry Form 1.0.2<br>
+				<p style="padding-top: 10px"> Generic SPARQL Data Entry Form 1.0.4<br>
 					Description: Simple Data Entry Form that helps unravel the power of RDF and SPARQL with regards to Structured Data creation and interaction. <br> 
 					Creator: <a href="https://jordan.solid.openlinksw.com:8444/profile/card#me">Jordan Idehen</a> (<a href="https://github.com/jidehen#this">Github</a>, <a href="https://www.linkedin.com/in/jordan-idehen-143934157/#this">LinkedIn</a>) <br>
 					Supervisor: <a href="https://github.com/OpenLinkSoftware#this">OpenLink Software</a> 
@@ -307,6 +309,7 @@
 
 	                  solid_storage = await fetchProfile(session.webId);
 	                  sessionStorage.setItem('solid_storage', solid_storage);
+                      await docNameValue()
 	                }
 
 	              } else {
@@ -764,7 +767,7 @@
 	        };
 		
 			try {
-		        var resp = await fetch(url, options);
+		        var resp = await fetch(url,options);
 				if (resp.status >= 200 && resp.status <= 300) {
 					console.log(resp.status + " - " + resp.statusText) ;
 					updateTable() ;
@@ -818,7 +821,7 @@
                                 body: delete_cmd,
             };
 			try {
-				var resp = await fetch(url, options);
+				var resp = await fetch(url,options);
 				if (resp.status >= 200 && resp.status <= 300) {
 					console.log(resp.status + " - " + resp.statusText);
 					updateTable() ;
@@ -887,7 +890,7 @@
 	                            crossDomain: true,
 	                        };
 			try {
-		        var resp = await fetch(url, options)
+		        var resp = await fetch(url,options)
 			
 				.then((res) => res.json())
 		        .then( data =>{
@@ -985,7 +988,7 @@
 	                            crossDomain: true,
 	                        };
 			try {
-		        var resp = await fetch(url, options)
+		        var resp = await fetch(url,options)
 			
 				.then((res) => res.json())
 		        .then( data =>{
@@ -1088,7 +1091,7 @@
 	                        };
 			
 			try {
-		        var resp = await fetch(url, options)
+		        var resp = await fetch(url,options)
 	
 				.then((res) => res.json())
 		        .then( data =>{
@@ -1183,7 +1186,7 @@
 	        };
 		
 			try {
-				const resp = await fetch(url, options); // resp awaits completion of fetch 
+				const resp = await fetch(url,options); // resp awaits completion of fetch 
 			
 				if (resp.status >= 200 && resp.status <= 300) {
 					console.log(resp.status + " - " + resp.statusText);
@@ -1228,7 +1231,7 @@
 	        };
 		
 			try {
-		        var resp = await fetch(url, options);
+		        var resp = await solid.auth.fetch(url,options);
 				if (resp.status >= 200 && resp.status <= 300) {
 					hideSpinner() ;
 					console.log(resp.status + " - " + resp.statusText);
@@ -1273,7 +1276,7 @@
 	        };
 		
 			try {
-		        var resp = await fetch(url, options);
+		        var resp = await solid.auth.fetch(url,options);
 				if (resp.status >= 200 && resp.status <= 300) {
 					hideSpinner() ;
 					console.log(resp.status + " - " + resp.statusText);
@@ -1337,7 +1340,7 @@
                              crossDomain: true,
                          };
            try {
-               var resp = await solid.auth.fetch(url, options);
+               var resp = await solid.auth.fetch(url,options);
                if (resp.ok) {
  		  var body = await resp.text();
  		  var contentType = resp.headers.get('content-type');

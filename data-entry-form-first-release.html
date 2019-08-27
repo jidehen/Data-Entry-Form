@@ -821,10 +821,21 @@
 		}
 		
 		async function first() {
+			var nextButton = checkId("nextBtnID", "nextBtnID2") ;
+			var prevButton = checkId("prevBtnID", "prevBtnID2") ;
 			offset = 0 ;
 			
 			console.log("Limit = " + limit)
 			console.log("Offset = " + offset)
+			
+			//show next button
+			if (nextButton.classList.contains('hidden')) {
+				nextButton.classList.remove('hidden') ;
+			}
+			// hide prev button
+			if (!prevButton.classList.contains('hidden')) {
+				prevButton.classList.add('hidden') ;
+			}
 			
 			// code below is to determine how to refresh the table
 			if (resultMode == "bn") {
@@ -837,11 +848,22 @@
 		}
 		
 		async function last() {
+			var nextButton = checkId("nextBtnID", "nextBtnID2") ;
+			var prevButton = checkId("prevBtnID", "prevBtnID2") ;
 			await getNumResults() ; // await update tableLen
 			offset = tableLen - limit ;
 			
 			console.log("Limit = " + limit)
 			console.log("Offset = " + offset)
+			
+			//hide next button
+			if (!nextButton.classList.contains('hidden')) {
+				nextButton.classList.add('hidden') ;
+			}
+			//show prev button
+			if (prevButton.classList.contains('hidden')) {
+				prevButton.classList.remove('hidden') ;
+			}
 			
 			// code below is to determine how to refresh the table
 			if (resultMode == "bn") {

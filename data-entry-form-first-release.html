@@ -379,7 +379,7 @@
 		}
 	
 		// This function checks which tab the user is in to determine focus of functions
-		function tabCheck(id1, id2) {
+		function checkValue(id1, id2) {
 			if (document.getElementById('dbmsTabID').getAttribute('class') == "active"){
 				return document.getElementById(id1).value ;
 			} else if (document.getElementById('fsTabID').getAttribute('class') == "active"){
@@ -388,7 +388,7 @@
 		}
 	
 		// This function checks which tab the user is in to determine table to display data (different because of .value)
-		function tabCheckTable(id1, id2) {
+		function checkId(id1, id2) {
 			if (document.getElementById('dbmsTabID').getAttribute('class') == "active"){
 				return document.getElementById(id1) ;
 			} else if (document.getElementById('fsTabID').getAttribute('class') == "active"){
@@ -524,7 +524,7 @@
 		document.getElementById("subjectID").addEventListener("input", validateSubject);
 		document.getElementById("subjectID2").addEventListener("input", validateSubject);
 		function validateSubject() {
-			var str = tabCheck("subjectID", "subjectID2") ;
+			var str = checkValue("subjectID", "subjectID2") ;
 
 			try {	
 				if (document.getElementById('dbmsTabID').getAttribute('class') == "active") { 
@@ -574,7 +574,7 @@
 	
 		// This function formats the Predicate input. Comments are inline
 		function formatPredicate() {
-			var str = tabCheck("predicateID", "predicateID2") ;
+			var str = checkValue("predicateID", "predicateID2") ;
 			if (regexp.test(str) && !isBlankNode(str)) {
 				return '<' + str + '>' ; // Case: input is a uri. Solution: quote it
 			} else if (str.charAt(0) == "#") {
@@ -600,7 +600,7 @@
 		document.getElementById("predicateID").addEventListener("input", validatePredicate);
 		document.getElementById("predicateID2").addEventListener("input", validatePredicate);
 		function validatePredicate() {
-			var str = tabCheck("predicateID", "predicateID2") ;
+			var str = checkValue("predicateID", "predicateID2") ;
 		
 			try {
 				if (document.getElementById('dbmsTabID').getAttribute('class') == "active"){
@@ -640,7 +640,7 @@
 		// This function formats the Object input. Comments are inline
 		async function validateObject(str) {
 			var range = await predicateRange() ; // function waits until range is a value rather than a promise
-			var str = tabCheck("objectID", "objectID2") ;
+			var str = checkValue("objectID", "objectID2") ;
 		
 			if (str.includes('"') || str.includes("'")) {
 				range = true ;
@@ -670,7 +670,7 @@
 	
 		// This function formats the Object input. Comments are inline
 		function nonvalidatedObject() {
-			var str = tabCheck("objectID", "objectID2") ;
+			var str = checkValue("objectID", "objectID2") ;
 		
 			if (regexp.test(str) && !isBlankNode(str)) {
 				return '<' + str + '>' ; // Case: input is a uri. Solution: quote it
@@ -697,7 +697,7 @@
 		function tableFormat(str) {
 			// Regular Expression for URIs in table specifically
 			const tableexp = /(https|http|mailto|tel|dav|ftp|ftps)[:^/s]/i;
-			var graph = tabCheck("docNameID", "docNameID2") ;
+			var graph = checkValue("docNameID", "docNameID2") ;
 			var strLabel = str ; // variable for what is show on screen in the href
 			
 			if (document.getElementById("uriID").checked == true) { //if user wants short URIs
@@ -721,7 +721,7 @@
 		
 		// This function is used to referesh the table when view data is clicked
 		function refreshTable() {
-			var table = tabCheckTable("dbmsTableID", "fsTableID") ;
+			var table = checkId("dbmsTableID", "fsTableID") ;
 
 			for (var i = document.getElementById(table.id).rows.length; i > 0; i--) {
 				document.getElementById(table.id).deleteRow(i - 1);
@@ -744,10 +744,11 @@
 		async function next() {
 			offset += parseInt(limit) ;
 			await getNumResults() ; // await update tableLen
-			var nextButton = tabCheck("nextBtnID", "nextBtnID2") ;
-			var prevButton = tabCheck("prevBtnID", "prevBtnID2") ;
+			var nextButton = checkId("nextBtnID", "nextBtnID2") ;
+			var prevButton = checkId("prevBtnID", "prevBtnID2") ;
 						
 			if (offset > 0 && offset < tableLen - limit) { // if next and prev are in range buttons show
+				console.log("in range")
 				if (nextButton.classList.contains('hidden')) {
 					nextButton.classList.remove('hidden') ;
 				}
@@ -781,8 +782,8 @@
 		async function previous() {
 			offset -= parseInt(limit) ;
 			await getNumResults() ; // await update tableLen
-			var nextButton = tabCheck("nextBtnID", "nextBtnID2") ;
-			var prevButton = tabCheck("prevBtnID", "prevBtnID2") ;
+			var nextButton = checkId("nextBtnID", "nextBtnID2") ;
+			var prevButton = checkId("prevBtnID", "prevBtnID2") ;
 						
 			if (offset > 0 && offset < tableLen - limit) { // if next and prev are in range buttons show
 				if (nextButton.classList.contains('hidden')) {
@@ -843,7 +844,7 @@
 	
 		// This function is used to create header row of table
 		function createHeader() {
-			var table = tabCheckTable("dbmsTableID", "fsTableID") ;
+			var table = checkId("dbmsTableID", "fsTableID") ;
 			
 			var header = table.createTHead(); // creates empty tHead
 			var row = header.insertRow(0); // inserts row into tHead
@@ -983,7 +984,7 @@
 		    var subject = validateSubject() ;
 			var predicate = validatePredicate() ;
 			var object = nonvalidatedObject() ;
-			var graph = tabCheck("docNameID", "docNameID2") ;
+			var graph = checkValue("docNameID", "docNameID2") ;
 			
 			
 			if (document.getElementById('dbmsTabID').getAttribute('class') == "active") { 
@@ -1012,7 +1013,7 @@
 			}
 			
 			
-			var endpoint = tabCheck("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;
+			var endpoint = checkValue("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;
 	        let url = endpoint + encodeURIComponent(query) + "&should-sponge=&format=application%2Fsparql-results%2Bjson" ;
 			
 			if (document.getElementById("cmdID").checked == true) {
@@ -1043,7 +1044,7 @@
                     are handled via an N-Tuple structured table (relation).
                     */
 		            if (data.results.bindings.length > 0){
-						var table = tabCheckTable("dbmsTableID", "fsTableID") ; // creates table for header
+						var table = checkId("dbmsTableID", "fsTableID") ; // creates table for header
 						var header = table.createTHead(); // creates empty tHead
 						var headRow = header.insertRow(0); // inserts row into tHead
 						var bindings = data.results.bindings;
@@ -1084,7 +1085,7 @@
 		    var subject = validateSubject() ;
 			var predicate = validatePredicate() ;
 			var object = nonvalidatedObject() ;
-			var graph = tabCheck("docNameID", "docNameID2") ;	
+			var graph = checkValue("docNameID", "docNameID2") ;	
 			
 			if (isBlankNode(subject) || isBlankNode(object)) {
 				bnQueryGen(); // if query includes blank node call bnQueryGen function
@@ -1116,7 +1117,7 @@
 				query = "DEFINE input:inference" + ' ' + "'" + document.getElementById("infRuleNameID").value + "'" + ' \n' + query ;
 			}
 			
-			var endpoint = tabCheck("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;
+			var endpoint = checkValue("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;
 	        let url = endpoint + encodeURIComponent(query) + "&should-sponge=&format=application%2Fsparql-results%2Bjson" ;
 			
 			if (document.getElementById("cmdID").checked == true) {
@@ -1143,7 +1144,7 @@
 					createHeader();
 
 		            if (data.results.bindings.length > 0){
-						var table = tabCheckTable("dbmsTableID", "fsTableID") ;
+						var table = checkId("dbmsTableID", "fsTableID") ;
 						var object = nonvalidatedObject() ;
 						for (var i = 0; i < data.results.bindings.length; i++) {
 							var subject = data.results.bindings[i].subject.value ;
@@ -1202,7 +1203,7 @@
 			resultMode = "all"
 			limit = getLimit() ;
 			showSpinner() ;
-			var graph = tabCheck("docNameID", "docNameID2") ;
+			var graph = checkValue("docNameID", "docNameID2") ;
 			
 			if (document.getElementById('dbmsTabID').getAttribute('class') == "active") {
 			    var query = 
@@ -1223,7 +1224,7 @@
 				query = "DEFINE input:inference" + ' ' + "'" + document.getElementById("infRuleNameID").value + "'" + ' \n' + query ;
 			}
 
-            var endpoint = tabCheck("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;
+            var endpoint = checkValue("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;
 	        let url = endpoint + encodeURIComponent(query) + "&should-sponge=&format=application%2Fsparql-results%2Bjson" ;
 
 			if (document.getElementById("cmdID").checked == true) {
@@ -1250,7 +1251,7 @@
 					
 				    refreshTable();
 					createHeader();
-					var table = tabCheckTable("dbmsTableID", "fsTableID") ;
+					var table = checkId("dbmsTableID", "fsTableID") ;
 					
 		            if (data.results.bindings.length > 0){
 						for (var i = 0; i < data.results.bindings.length; i++) {	
@@ -1305,7 +1306,7 @@
 
 		// This gets the size of the table
 	    async function getNumResults() {
-			var graph = tabCheck("docNameID", "docNameID2") ;
+			var graph = checkValue("docNameID", "docNameID2") ;
 			
 			if (document.getElementById('dbmsTabID').getAttribute('class') == "active") {
 			    var query = 
@@ -1322,7 +1323,7 @@
 				query = "DEFINE input:inference" + ' ' + "'" + document.getElementById("infRuleNameID").value + "'" + ' \n' + query ;
 			}
 
-            var endpoint = tabCheck("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;
+            var endpoint = checkValue("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;
 	        let url = endpoint + encodeURIComponent(query) + "&should-sponge=&format=application%2Fsparql-results%2Bjson" ;
 
 			if (document.getElementById("cmdID").checked == true) {
@@ -1363,7 +1364,7 @@
 		// This function gets the range of the predicate to determine if object is a literal or a reference
 		async function predicateRange() {
 			var predicate = validatePredicate() ; 
-			var graph = tabCheck("docNameID", "docNameID2") ;
+			var graph = checkValue("docNameID", "docNameID2") ;
 		
 		    var range_query =
 			"PREFIX : <" + graph + "#>\n" 
@@ -1374,7 +1375,7 @@
 			+ "filter (?range in (rdfs:Literal, xsd:string, xsd:decimal, xsd:integer, xsd:boolean, xsd:date, xsd:time))\n"
 			+"}" 		
 			
-            var endpoint = tabCheck("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;
+            var endpoint = checkValue("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;
 			// This sets the url for retrieving the json
 	        let url = endpoint + encodeURIComponent(range_query) + "&should-sponge=&format=application%2Fsparql-results%2Bjson" ; 
 

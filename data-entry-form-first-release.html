@@ -746,9 +746,11 @@
 			await getNumResults() ; // await update tableLen
 			var nextButton = checkId("nextBtnID", "nextBtnID2") ;
 			var prevButton = checkId("prevBtnID", "prevBtnID2") ;
+			
+			console.log("Limit = " + limit)
+			console.log("Offset = " + offset)
 						
 			if (offset > 0 && offset < tableLen - limit) { // if next and prev are in range buttons show
-				console.log("in range")
 				if (nextButton.classList.contains('hidden')) {
 					nextButton.classList.remove('hidden') ;
 				}
@@ -762,8 +764,8 @@
 					}
 				}
 				if (offset <= 0) { // if prev is out of range hide it
-					if (!prevButton.getElementById("prevBtnID").classList.contains('hidden')) {
-						prevButton.getElementById("prevBtnID").classList.add('hidden') ;
+					if (!prevButton.classList.contains('hidden')) {
+						prevButton.classList.add('hidden') ;
 					}
 				}
 			}
@@ -784,6 +786,9 @@
 			await getNumResults() ; // await update tableLen
 			var nextButton = checkId("nextBtnID", "nextBtnID2") ;
 			var prevButton = checkId("prevBtnID", "prevBtnID2") ;
+			
+			console.log("Limit = " + limit)
+			console.log("Offset = " + offset)
 						
 			if (offset > 0 && offset < tableLen - limit) { // if next and prev are in range buttons show
 				if (nextButton.classList.contains('hidden')) {
@@ -799,8 +804,8 @@
 					}
 				}
 				if (offset <= 0) { // if prev is out of range hide it
-					if (!prevButton.getElementById("prevBtnID").classList.contains('hidden')) {
-						prevButton.getElementById("prevBtnID").classList.add('hidden') ;
+					if (!prevButton.classList.contains('hidden')) {
+						prevButton.classList.add('hidden') ;
 					}
 				}
 			}
@@ -818,6 +823,9 @@
 		async function first() {
 			offset = 0 ;
 			
+			console.log("Limit = " + limit)
+			console.log("Offset = " + offset)
+			
 			// code below is to determine how to refresh the table
 			if (resultMode == "bn") {
 				bnQueryGen() ;
@@ -831,6 +839,9 @@
 		async function last() {
 			await getNumResults() ; // await update tableLen
 			offset = tableLen - limit ;
+			
+			console.log("Limit = " + limit)
+			console.log("Offset = " + offset)
 			
 			// code below is to determine how to refresh the table
 			if (resultMode == "bn") {

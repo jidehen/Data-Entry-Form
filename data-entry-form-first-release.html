@@ -47,17 +47,22 @@
 			  </div>
 			  <!-- Inference Rule Name -->
 			  <div class="checkbox">
-			    <label><input id="ruleNameID" type="checkbox" value="">Inference Rule</label> <br>
-				<input type="text" style="max-width: 130px" value="urn:ifp:inference:rule" id="infRuleNameID">
+			    <label><input id="ruleNameID" type="checkbox" value="">Inference Rule:</label> <br>
+				<input type="text" style="max-width: 250px" value="urn:ifp:inference:rule" id="infRuleNameID">
 			  </div>
 			  <!-- Console Print Commands Checkbox  -->
 			  <div class="checkbox">
 			    <label><input id="cmdID" type="checkbox" value="">Console Log Commands</label>
 			  </div>
+  			  <!-- Number of Results per Page -->
+			  <div class="form-group">
+				  <label style="font-weight: normal" for="resultsID">Results per Page:</label>
+				  <input type="text" style="max-width: 250px" value="5" id="resultsID">
+			  </div>
 		    </ul>
 		  </li>
 		  <!-- End Dropdown -->
-		  <a id="logged-href" href="" title="" style="margin-top: 5px; margin-left: 15px;" class="pull-right" class="hidden"><img id="uid-icon" src="./common/uid.png"></a>
+		  <a id="logged-href" href="" title="" style="margin-top: 5px; margin-left: 15px; max-height: 35px" class="pull-right" class="hidden"><img id="uid-icon" src="./common/uid.png"></a>
 		  <li class="pull-right"> <button id="loginID" style="margin-top: 5px" type="button" onclick="authLogin()" class="hidden btn btn-primary">Login</button> </li>
 		  <li class="pull-right"><button id="logoutID" style="margin-top: 5px" type="button" onclick="authLogout()" class="hidden btn btn-danger">Logout</button></li>
 		  
@@ -123,6 +128,14 @@
 		  				    <!-- Table is empty because it is created by the updateTable, queryGen, or bnQueryGen method -->
 		  					</div>
 		  				</table>
+						<div class="button-wrapper">
+							<button id="firstBtnID" type="button" onclick="first()" style="background-color: #99A3A4; color: #FDFEFE; margin-right: 5px" class="btn pull-left">First</button>
+							<button id="prevBtnID" type="button" onclick="previous()" style="background-color: #99A3A4; color: #FDFEFE" class="btn pull-left hidden">Prev</button>
+							<button id="lastBtnID" type="button" onclick="last()" style="background-color: #99A3A4; color: #FDFEFE; margin-left: 5px" class="btn pull-right">Last</button>
+							
+							<button id="nextBtnID" type="button" onclick="next()" style="background-color: #99A3A4; color: #FDFEFE" class="btn pull-right">Next</button>
+							
+						</div>
 		  	        </div>
 		  			<!--Table Div End (Right Side) -->
 		  	    </div>
@@ -187,6 +200,11 @@
 		  				    <!-- Table is empty because it is created by the updateTable method -->
 		  					</div>
 		  				</table>
+						<div class="button-wrapper">
+							<span>&nbsp&nbsp</span>
+							<button id="prevBtnID2" type="button" onclick="previous()" style="background-color: #99A3A4; color: #FDFEFE" class="btn pull-left hidden">Prev</button>
+							<button id="nextBtnID2" type="button" onclick="next()" style="background-color: #99A3A4; color: #FDFEFE" class="btn pull-right">Next</button>
+						</div>
 		  	        </div>
 		  			<!--Table Div End (Right Side) -->
 		  	    </div>
@@ -199,7 +217,7 @@
 				<p style="padding-top: 10px"> Generic SPARQL Data Entry Form 1.0.4<br>
 					Description: Simple Data Entry Form that helps unravel the power of RDF and SPARQL with regards to Structured Data creation and interaction. <br> 
 					Creator: <a href="https://jordan.solid.openlinksw.com:8444/profile/card#me">Jordan Idehen</a> (<a href="https://github.com/jidehen#this">Github</a>, <a href="https://www.linkedin.com/in/jordan-idehen-143934157/#this">LinkedIn</a>) <br>
-					Supervisor: <a href="https://github.com/OpenLinkSoftware#this">OpenLink Software</a> 
+					Supervisor: <a href="https://github.com/OpenLinkSoftware#this">OpenLink Software</a> <br>
 					License: Public Domain  
 				</p>
 			</div>
@@ -265,6 +283,7 @@
 	<style>
 		.dropdown-menu {
 		   padding-left: 15px;
+		   width: 250px;
 		}
 		.glyphicon.glyphicon-cog {
 		    font-size: 20px;
@@ -704,7 +723,116 @@
 			var table = tabCheckTable("dbmsTableID", "fsTableID") ;
 
 			for (var i = document.getElementById(table.id).rows.length; i > 0; i--) {
-				document.getElementById(table.id).deleteRow(i -1);
+				document.getElementById(table.id).deleteRow(i - 1);
+			}
+		}
+		
+		var offset = Number("0") ;
+		var limit = Number("0") ;
+		// This function gets the limit that the user input in settings and resets offset
+		function getLimit() {
+			if (document.getElementById("resultsID").value != limit) { //if user changes limit reset offset to 0
+				offset = Number("0") ;
+			}
+			limit = document.getElementById("resultsID").value ;
+			return limit ;
+		}
+		
+		var tableLen = 0;
+		// function updates offset when next is clicked. note: limit is defined when table is updated or queried
+		async function next() {
+			offset += parseInt(limit) ;
+			await getNumResults() ; // await update tableLen
+						
+			if (offset > 0 && offset < tableLen - limit) { // if next and prev are in range buttons show
+				if (document.getElementById("nextBtnID").classList.contains('hidden')) {
+					document.getElementById("nextBtnID").classList.remove('hidden') ;
+				}
+				if (document.getElementById("prevBtnID").classList.contains('hidden')) {
+					document.getElementById("prevBtnID").classList.remove('hidden') ;
+				}
+			} else { // if next or prev are out of range
+				if (offset >= tableLen - limit) { // if next is out of range hide it
+					if (!document.getElementById("nextBtnID").classList.contains('hidden')) {
+						document.getElementById("nextBtnID").classList.add('hidden') ;
+					}
+				}
+				if (offset <= 0) { // if prev is out of range hide it
+					if (!document.getElementById("prevBtnID").classList.contains('hidden')) {
+						document.getElementById("prevBtnID").classList.add('hidden') ;
+					}
+				}
+			}
+			
+			// code below is to determine how to refresh the table
+			if (resultMode == "bn") {
+				bnQueryGen() ;
+			} else if (resultMode == "query") {
+				queryGen() ;
+			} else {
+				updateTable() ;
+			}
+		}
+		
+		// function updates previous when next is clicked. note: limit is defined when table is updated or queried
+		async function previous() {
+			offset -= parseInt(limit) ;
+			await getNumResults() ; // await update tableLen
+						
+			if (offset > 0 && offset < tableLen - limit) { // if next and prev are in range buttons show
+				if (document.getElementById("nextBtnID").classList.contains('hidden')) {
+					document.getElementById("nextBtnID").classList.remove('hidden') ;
+				}
+				if (document.getElementById("prevBtnID").classList.contains('hidden')) {
+					document.getElementById("prevBtnID").classList.remove('hidden') ;
+				}
+			} else { // if next or prev are out of range
+				if (offset >= tableLen - limit) { // if next is out of range hide it
+					if (!document.getElementById("nextBtnID").classList.contains('hidden')) {
+						document.getElementById("nextBtnID").classList.add('hidden') ;
+					}
+				}
+				if (offset <= 0) { // if prev is out of range hide it
+					if (!document.getElementById("prevBtnID").classList.contains('hidden')) {
+						document.getElementById("prevBtnID").classList.add('hidden') ;
+					}
+				}
+			}
+			
+			// code below is to determine how to refresh the table
+			if (resultMode == "bn") {
+				bnQueryGen() ;
+			} else if (resultMode == "query") {
+				queryGen() ;
+			} else {
+				updateTable() ;
+			}
+		}
+		
+		async function first() {
+			offset = 0 ;
+			
+			// code below is to determine how to refresh the table
+			if (resultMode == "bn") {
+				bnQueryGen() ;
+			} else if (resultMode == "query") {
+				queryGen() ;
+			} else {
+				updateTable() ;
+			}
+		}
+		
+		async function last() {
+			await getNumResults() ; // await update tableLen
+			offset = tableLen - limit ;
+			
+			// code below is to determine how to refresh the table
+			if (resultMode == "bn") {
+				bnQueryGen() ;
+			} else if (resultMode == "query") {
+				queryGen() ;
+			} else {
+				updateTable() ;
 			}
 		}
 	
@@ -728,6 +856,7 @@
 	
 	<!-- These Functions Handle the Functionality of the Page -->
 	<script>
+		var resultMode = null; //variable used to determine what query result mode application is in for next/prev
 		updateTable(); //Table is always shown when page is loaded
 	
 		//SPARQL INSERT SCRIPT
@@ -738,7 +867,7 @@
 			var object = await validateObject() ; // insert function awaits object value before proceeding
 			var graph = document.getElementById("docNameID").value ;
 	
-		    //SPARQL INSERT Query Generator
+		    //SPARQL INSERT Generator
 		    var insert_cmd = 
 			"PREFIX schema: <http://schema.org/>\n" 
 			+ "PREFIX : <" + graph + "#>\n" 
@@ -791,7 +920,7 @@
      		var object = nonvalidatedObject() ;
      		var graph = document.getElementById("docNameID").value ;
 
-     	    //SPARQL DELETE Query Generator
+     	    //SPARQL DELETE Generator
     		var delete_cmd = 
    			"PREFIX : <" + graph + "#>\n" 
     		+ "DELETE { GRAPH <" + graph + "> {\n"
@@ -843,6 +972,8 @@
 		This function is required because blank node queries can 
 		require n number of columns. */
 		async function bnQueryGen() {
+			resultMode = "bn" ;
+			limit = getLimit() ;
 			showSpinner() ;
 		    var subject = validateSubject() ;
 			var predicate = validatePredicate() ;
@@ -856,6 +987,8 @@
 				+ "SELECT DISTINCT * \n"
 				+ "FROM <" + graph + "> \n" 
 				+ "WHERE {" + " " + subject + " " + predicate + " " + object + " " + "}"
+				+ "\n" + "OFFSET " + offset + "\n"
+				+ "LIMIT " + limit
 			} else if (document.getElementById('fsTabID').getAttribute('class') == "active") {
 			    var query = 
 				"DEFINE get:soft" + " " + '"soft"' + "\n"
@@ -863,6 +996,8 @@
 				+ "SELECT DISTINCT * \n"
 				+ "FROM <" + graph + "> \n" 
 				+ "WHERE {" + " " + subject + " " + predicate + " " + object + " " + "}"
+				+ "\n" + "OFFSET " + offset + "\n"
+				+ "LIMIT " + limit
 			}
 			
 			if (document.getElementById("riID").checked == true) {// if reasoning and inference is on
@@ -938,6 +1073,8 @@
 	
 		// This function updates table to show results of a query
 		async function queryGen() {
+			resultMode = "query"
+			limit = getLimit() ;
 			showSpinner() ;
 		    var subject = validateSubject() ;
 			var predicate = validatePredicate() ;
@@ -955,6 +1092,8 @@
 				+ "SELECT DISTINCT" + " " + subject + " AS ?subject" + " " + predicate + " AS ?predicate" + " " + object + " AS ?object \n"
 				+ "FROM <" + graph + "> \n" 
 				+ "WHERE {" + " " + subject + " " + predicate + " " + object + " " + "}"
+				+ "\n" + "OFFSET " + offset + "\n"
+				+ "LIMIT " + limit
 			} else if (document.getElementById('fsTabID').getAttribute('class') == "active") {
 				var query = 
 				"DEFINE get:soft" + " " + '"soft"' + "\n"
@@ -962,6 +1101,8 @@
 				+ "SELECT DISTINCT" + " " + subject + " AS ?subject" + " " + predicate + " AS ?predicate" + " " + object + " AS ?object \n"
 				+ "FROM <" + graph + "> \n" 
 				+ "WHERE {" + " " + subject + " " + predicate + " " + object + " " + "}"
+				+ "\n" + "OFFSET " + offset + "\n"
+				+ "LIMIT " + limit
 			}
 			
 			if (document.getElementById("riID").checked == true) {// if reasoning and inference is on
@@ -1053,30 +1194,36 @@
 	
 		// This function fetches the query results and returns them in json
 	    async function updateTable() {
+			resultMode = "all"
+			limit = getLimit() ;
 			showSpinner() ;
 			var graph = tabCheck("docNameID", "docNameID2") ;
 			
 			if (document.getElementById('dbmsTabID').getAttribute('class') == "active") {
-			    var data_query = 
+			    var query = 
 				"SELECT DISTINCT * FROM <" + graph + "> WHERE {?subject ?predicate ?object}"
+				+ "\n" + "OFFSET " + offset + "\n"
+				+ "LIMIT " + limit
 			} else if (document.getElementById('fsTabID').getAttribute('class') == "active") {
 				// Use of Sponger Pragma to force document reload during query evaluation
-				var data_query = 
+				var query = 
 				"DEFINE get:soft" + " " + '"soft"' + "\n" + "SELECT DISTINCT * FROM <" + graph + "> WHERE {?subject ?predicate ?object}"
+				+ "\n" + "OFFSET " + offset + "\n"
+				+ "LIMIT " + limit
 			}
 			
 			if (document.getElementById("riID").checked == true) {// if reasoning and inference is on
-				data_query = "DEFINE input:same-as" + '"yes" \n' + data_query ;
+				query = "DEFINE input:same-as" + '"yes" \n' + query ;
 			} else if (document.getElementById("ruleNameID").checked == true) {
-				data_query = "DEFINE input:inference" + ' ' + "'" + document.getElementById("infRuleNameID").value + "'" + ' \n' + data_query ;
+				query = "DEFINE input:inference" + ' ' + "'" + document.getElementById("infRuleNameID").value + "'" + ' \n' + query ;
 			}
 
             var endpoint = tabCheck("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;
-	        let url = endpoint + encodeURIComponent(data_query) + "&should-sponge=&format=application%2Fsparql-results%2Bjson" ;
+	        let url = endpoint + encodeURIComponent(query) + "&should-sponge=&format=application%2Fsparql-results%2Bjson" ;
 
 			if (document.getElementById("cmdID").checked == true) {
 		        console.log("Retrieving Table Data From: " + url);
-				console.log("Query: " + data_query);
+				console.log("Query: " + query);
 			}
 	        
 		
@@ -1149,6 +1296,63 @@
 				console.error('Table Refresh Failed', e) ;
 				alert('Table Refresh Failed ' + e);
 			}		  
+	    }
+
+		// This gets the size of the table
+	    async function getNumResults() {
+			var graph = tabCheck("docNameID", "docNameID2") ;
+			
+			if (document.getElementById('dbmsTabID').getAttribute('class') == "active") {
+			    var query = 
+				"SELECT DISTINCT COUNT(*) AS ?count FROM <" + graph + "> WHERE {?subject ?predicate ?object}"
+			} else if (document.getElementById('fsTabID').getAttribute('class') == "active") {
+				// Use of Sponger Pragma to force document reload during query evaluation
+				var query = 
+				"DEFINE get:soft" + " " + '"soft"' + "\n" + "SELECT DISTINCT COUNT(*) AS ?count FROM <" + graph + "> WHERE {?subject ?predicate ?object}"
+			}
+			
+			if (document.getElementById("riID").checked == true) {// if reasoning and inference is on
+				query = "DEFINE input:same-as" + '"yes" \n' + query ;
+			} else if (document.getElementById("ruleNameID").checked == true) {
+				query = "DEFINE input:inference" + ' ' + "'" + document.getElementById("infRuleNameID").value + "'" + ' \n' + query ;
+			}
+
+            var endpoint = tabCheck("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;
+	        let url = endpoint + encodeURIComponent(query) + "&should-sponge=&format=application%2Fsparql-results%2Bjson" ;
+
+			if (document.getElementById("cmdID").checked == true) {
+		        console.log("Retrieving Table Length From: " + url);
+				console.log("Query: " + query);
+			}
+	        
+		
+	        const options = {
+	                            method: 'GET',
+	                            headers: {
+	                                       'Content-type': 'application/sparql-results+json; charset=UTF-8',
+										 },
+	                            credentials: 'include',
+	                            mode: 'cors',
+	                            crossDomain: true,
+	                        };
+			
+			try {
+		        var resp = await fetch(url,options)
+	
+				.then((res) => res.json())
+		        .then( data =>{
+					
+		            if (data.results.bindings.length > 0){
+						tableLen = data.results.bindings[0].count.value ;
+		            } else{
+						console.log("Table size is 0");
+		            }
+				})	
+			} catch(e) {
+				hideSpinner() ;
+				console.error('Table Size Failed', e) ;
+				alert('Table Size Failed ' + e);
+			}	
 	    }
 	
 		// This function gets the range of the predicate to determine if object is a literal or a reference
@@ -1377,6 +1581,7 @@
             await solid.auth.logout()
             location.reload()
         }
+		
 	</script>
   </body>
 </html>

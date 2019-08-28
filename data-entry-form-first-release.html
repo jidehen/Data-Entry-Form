@@ -47,7 +47,7 @@
 			  </div>
 			  <!-- Inference Rule Name -->
 			  <div class="checkbox">
-			    <label><input id="ruleNameID" type="checkbox" value="">Inference Rule:</label> <br>
+			    <label><input id="ruleNameID" type="checkbox" value="">Inference Rule</label> <br>
 				<input type="text" style="max-width: 250px" value="urn:ifp:inference:rule" id="infRuleNameID">
 			  </div>
 			  <!-- Console Print Commands Checkbox  -->
@@ -130,10 +130,10 @@
 		  				</table>
 						<div class="button-wrapper">
 							<button id="firstBtnID" type="button" onclick="first()" style="background-color: #99A3A4; color: #FDFEFE; margin-right: 5px" class="btn pull-left">First</button>
-							<button id="prevBtnID" type="button" onclick="previous()" style="background-color: #99A3A4; color: #FDFEFE" class="btn pull-left hidden">Prev</button>
+							<button id="prevBtnID" type="button" onclick="previous()" style="background-color: #99A3A4; color: #FDFEFE" class="btn pull-left">Prev</button>
 							<button id="lastBtnID" type="button" onclick="last()" style="background-color: #99A3A4; color: #FDFEFE; margin-left: 5px" class="btn pull-right">Last</button>
 							
-							<button id="nextBtnID" type="button" onclick="next()" style="background-color: #99A3A4; color: #FDFEFE" class="btn pull-right">Next</button>
+							<button id="nextBtnID" type="button" onclick="next()" style="background-color: #99A3A4; color: #FDFEFE" class="btn pull-right ">Next</button>
 						</div>
 		  	        </div>
 		  			<!--Table Div End (Right Side) -->
@@ -204,7 +204,7 @@
 							<button id="prevBtnID2" type="button" onclick="previous()" style="background-color: #99A3A4; color: #FDFEFE" class="btn pull-left hidden">Prev</button>
 							<button id="lastBtnID2" type="button" onclick="last()" style="background-color: #99A3A4; color: #FDFEFE; margin-left: 5px" class="btn pull-right">Last</button>
 							
-							<button id="nextBtnID2" type="button" onclick="next()" style="background-color: #99A3A4; color: #FDFEFE" class="btn pull-right">Next</button>
+							<button id="nextBtnID2" type="button" onclick="next()" style="background-color: #99A3A4; color: #FDFEFE" class="btn pull-right hidden">Next</button>
 						</div>
 		  	        </div>
 		  			<!--Table Div End (Right Side) -->
@@ -692,7 +692,11 @@
 				return ':' + str ; // Case: input is not a uri or a blank node. Solution: make it a relative uri
 				} 			
 		}
+		
+	</script>
 	
+	<!-- These functions handle the data table -->
+	<script>
 		// This function allows hyperlinks to be used in the table
 		function tableFormat(str) {
 			// Regular Expression for URIs in table specifically
@@ -724,145 +728,7 @@
 			var table = checkId("dbmsTableID", "fsTableID") ;
 
 			for (var i = document.getElementById(table.id).rows.length; i > 0; i--) {
-				document.getElementById(table.id).deleteRow(i - 1);
-			}
-		}
-		
-		var offset = Number("0") ;
-		var limit = Number("0") ;
-		// This function gets the limit that the user input in settings and resets offset
-		function getLimit() {
-			if (document.getElementById("resultsID").value != limit) { //if user changes limit reset offset to 0
-				offset = Number("0") ;
-			}
-			limit = document.getElementById("resultsID").value ;
-			return limit ;
-		}
-		
-		var tableLen = 0;
-		// function updates offset when next is clicked. note: limit is defined when table is updated or queried
-		async function next() {
-			offset += parseInt(limit) ;
-			await getNumResults() ; // await update tableLen
-			var nextButton = checkId("nextBtnID", "nextBtnID2") ;
-			var prevButton = checkId("prevBtnID", "prevBtnID2") ;
-						
-			if (offset > 0 && offset < tableLen - limit) { // if next and prev are in range buttons show
-				if (nextButton.classList.contains('hidden')) {
-					nextButton.classList.remove('hidden') ;
-				}
-				if (prevButton.classList.contains('hidden')) {
-					prevButton.classList.remove('hidden') ;
-				}
-			} else { // if next or prev are out of range
-				if (offset >= tableLen - limit) { // if next is out of range hide it
-					if (!nextButton.classList.contains('hidden')) {
-						nextButton.classList.add('hidden') ;
-					}
-				}
-				if (offset <= 0) { // if prev is out of range hide it
-					if (!prevButton.classList.contains('hidden')) {
-						prevButton.classList.add('hidden') ;
-					}
-				}
-			}
-			
-			// code below is to determine how to refresh the table
-			if (resultMode == "bn") {
-				bnQueryGen() ;
-			} else if (resultMode == "query") {
-				queryGen() ;
-			} else {
-				updateTable() ;
-			}
-		}
-		
-		// function updates previous when next is clicked. note: limit is defined when table is updated or queried
-		async function previous() {
-			offset -= parseInt(limit) ;
-			await getNumResults() ; // await update tableLen
-			var nextButton = checkId("nextBtnID", "nextBtnID2") ;
-			var prevButton = checkId("prevBtnID", "prevBtnID2") ;
-			
-						
-			if (offset > 0 && offset < tableLen - limit) { // if next and prev are in range buttons show
-				if (nextButton.classList.contains('hidden')) {
-					nextButton.classList.remove('hidden') ;
-				}
-				if (prevButton.classList.contains('hidden')) {
-					prevButton.classList.remove('hidden') ;
-				}
-			} else { // if next or prev are out of range
-				if (offset >= tableLen - limit) { // if next is out of range hide it
-					if (!nextButton.classList.contains('hidden')) {
-						nextButton.classList.add('hidden') ;
-					}
-				}
-				if (offset <= 0) { // if prev is out of range hide it
-					if (!prevButton.classList.contains('hidden')) {
-						prevButton.classList.add('hidden') ;
-					}
-				}
-			}
-			
-			// code below is to determine how to refresh the table
-			if (resultMode == "bn") {
-				bnQueryGen() ;
-			} else if (resultMode == "query") {
-				queryGen() ;
-			} else {
-				updateTable() ;
-			}
-		}
-		
-		async function first() {
-			var nextButton = checkId("nextBtnID", "nextBtnID2") ;
-			var prevButton = checkId("prevBtnID", "prevBtnID2") ;
-			offset = 0 ;
-			
-			
-			//show next button
-			if (nextButton.classList.contains('hidden')) {
-				nextButton.classList.remove('hidden') ;
-			}
-			// hide prev button
-			if (!prevButton.classList.contains('hidden')) {
-				prevButton.classList.add('hidden') ;
-			}
-			
-			// code below is to determine how to refresh the table
-			if (resultMode == "bn") {
-				bnQueryGen() ;
-			} else if (resultMode == "query") {
-				queryGen() ;
-			} else {
-				updateTable() ;
-			}
-		}
-		
-		async function last() {
-			var nextButton = checkId("nextBtnID", "nextBtnID2") ;
-			var prevButton = checkId("prevBtnID", "prevBtnID2") ;
-			await getNumResults() ; // await update tableLen
-			offset = tableLen - limit ;
-			
-			
-			//hide next button
-			if (!nextButton.classList.contains('hidden')) {
-				nextButton.classList.add('hidden') ;
-			}
-			//show prev button
-			if (prevButton.classList.contains('hidden')) {
-				prevButton.classList.remove('hidden') ;
-			}
-			
-			// code below is to determine how to refresh the table
-			if (resultMode == "bn") {
-				bnQueryGen() ;
-			} else if (resultMode == "query") {
-				queryGen() ;
-			} else {
-				updateTable() ;
+				document.getElementById(table.id).deleteRow(i -1);
 			}
 		}
 	
@@ -881,23 +747,224 @@
 			cell1.innerHTML = "<b>Predicate</b>";
 			cell2.innerHTML = "<b>Object</b>";
 		}
+		
+		var limit = Number("0") ;
+		var offset = Number("0") ;
+		var tableSize = Number(setTableSize()) ;
+		var resultMode = null ;
+		
+		// This function sets the limit based on input and adjusts offset accordingly 
+		function setLimit() { // reset offset when limit is changed 
+			if (limit != document.getElementById("resultsID").value) {
+				offset = Number("0") ;
+			}
+			limit = Number(document.getElementById("resultsID").value) ;
+		}
+		
+		// this function hides or shows buttons
+		function buttonDisplay() {
+			var firstButton = checkId("firstBtnID", "firstBtnID2") ;
+			var nextButton = checkId("nextBtnID", "nextBtnID2") ;
+			var prevButton = checkId("prevBtnID", "prevBtnID2") ;
+			var lastButton = checkId("lastBtnID", "lastBtnID2") ;
+			var remainder = tableSize - limit ;
+			
+			if (offset < remainder) { // if there is a next page
+				if (nextButton.classList.contains('hidden')) { // show next button
+					nextButton.classList.remove('hidden') ;
+				}
+				if (lastButton.classList.contains('hidden')) { // show last button
+					lastButton.classList.remove('hidden') ;
+				}
+			} else { // if there is not a next page
+				if (!nextButton.classList.contains('hidden')) { // hide next button
+					nextButton.classList.add('hidden') ;
+				}
+				if (!lastButton.classList.contains('hidden')) { // hide last button
+					lastButton.classList.add('hidden') ;
+				}
+			}
+			
+			if (offset > 0) { // if there is a previous page
+				if (prevButton.classList.contains('hidden')) { // show prev button
+					prevButton.classList.remove('hidden') ;
+				}
+				if (firstButton.classList.contains('hidden')) { // show first button
+					firstButton.classList.remove('hidden') ;
+				}
+			} else { // if there is not a previous page
+				if (!prevButton.classList.contains('hidden')) { // hide prev button
+					prevButton.classList.add('hidden') ;
+				}
+				if (!firstButton.classList.contains('hidden')) { // hide first button
+					firstButton.classList.add('hidden') ;
+				}
+			}
+		}
+		
+		// This function goes to next page in table
+		function next() {
+			var nextButton = checkId("nextBtnID", "nextBtnID2") ;
+			var prevButton = checkId("prevBtnID", "prevBtnID2") ;
+			var remainder = tableSize - limit ;
+			
+			if (offset < remainder) { // if there is a next page
+				offset += parseInt(limit) ;
+				buttonDisplay() ;
+			}
+			
+			// refresh table
+			if (resultMode == "bn") {
+				bnQueryGen() ;
+			} else if (resultMode == "query") {
+				queryGen() ;
+			} else {
+				updateTable() ;
+			}
+		}
+		
+		// this function goes to previous page in table
+		function previous() {
+			var nextButton = checkId("nextBtnID", "nextBtnID2") ;
+			var prevButton = checkId("prevBtnID", "prevBtnID2") ;
+			var remainder = tableSize - limit ;
+			
+			if (offset > 0) { // if there is a previous page
+				offset -= parseInt(limit) ;
+				buttonDisplay() ;
+			}
+			
+			// refresh table
+			if (resultMode == "bn") {
+				bnQueryGen() ;
+			} else if (resultMode == "query") {
+				queryGen() ;
+			} else {
+				updateTable() ;
+			}
+		}
+		
+		// this function goes to the first page
+		function first() {
+			var firstButton = checkId("firstBtnID", "firstBtnID2") ;
+			var prevButton = checkId("prevBtnID", "prevBtnID2") ;
+			
+			if (offset > 0) {
+				offset = Number("0") ;
+
+				// refresh table
+				if (resultMode == "bn") {
+					bnQueryGen() ;
+				} else if (resultMode == "query") {
+					queryGen() ;
+				} else {
+					updateTable() ;
+				}
+				
+				buttonDisplay() ;
+			} else {
+				if (!firstButton.classList.contains('hidden')) { // hide first button
+					firstButton.classList.add('hidden') ;
+				}	
+			}
+		}
+		
+		function last() {
+			var lastButton = checkId("lastBtnID", "lastBtnID2") ;
+			var nextButton = checkId("nextBtnID", "nextBtnID2") ;
+			var remainder = tableSize - limit ;
+			
+			if (offset < remainder) {
+				offset = Number(remainder) ;
+			
+				// refresh table
+				if (resultMode == "bn") {
+					bnQueryGen() ;
+				} else if (resultMode == "query") {
+					queryGen() ;
+				} else {
+					updateTable() ;
+				}
+				
+				buttonDisplay() ;
+			} else {
+				if (!lastButton.classList.contains('hidden')) { // hide last button
+					lastButton.classList.add('hidden') ;
+				}
+			}
+		}
+		
+		// This sets the size of the current table
+	    async function setTableSize() {
+			var graph = checkValue("docNameID", "docNameID2") ;
+			
+			if (document.getElementById('dbmsTabID').getAttribute('class') == "active") {
+			    var query = 
+				"SELECT DISTINCT COUNT(*) AS ?count FROM <" + graph + "> WHERE {?subject ?predicate ?object}"
+			} else if (document.getElementById('fsTabID').getAttribute('class') == "active") {
+				// Use of Sponger Pragma to force document reload during query evaluation
+				var query = 
+				"DEFINE get:soft" + " " + '"soft"' + "\n" + "SELECT DISTINCT COUNT(*) AS ?count FROM <" + graph + "> WHERE {?subject ?predicate ?object}"
+			}
+			
+			if (document.getElementById("riID").checked == true) {// if reasoning and inference is on
+				query = "DEFINE input:same-as" + '"yes" \n' + query ;
+			} else if (document.getElementById("ruleNameID").checked == true) {
+				query = "DEFINE input:inference" + ' ' + "'" + document.getElementById("infRuleNameID").value + "'" + ' \n' + query ;
+			}
+
+            var endpoint = checkValue("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;
+	        let url = endpoint + encodeURIComponent(query) + "&should-sponge=&format=application%2Fsparql-results%2Bjson" ;
+
+			if (document.getElementById("cmdID").checked == true) {
+		        console.log("Retrieving Table Length From: " + url);
+				console.log("Query: " + query);
+			}
+	        
+	        const options = {
+	                            method: 'GET',
+	                            headers: {
+	                                       'Content-type': 'application/sparql-results+json; charset=UTF-8',
+										 },
+	                            credentials: 'include',
+	                            mode: 'cors',
+	                            crossDomain: true,
+	                        };
+			
+			try {
+		        var resp = await fetch(url,options)
 	
+				.then((res) => res.json())
+		        .then( data =>{
+					
+		            if (data.results.bindings.length > 0){
+						tableSize = Number(data.results.bindings[0].count.value) ;
+		            } else{
+						console.log("Table size is 0");
+		            }
+				})	
+			} catch(e) {
+				hideSpinner() ;
+				console.error('Table Size Failed', e) ;
+				alert('Table Size Failed ' + e);
+			}	
+	    }
 	</script>
 	
 	<!-- These Functions Handle the Functionality of the Page -->
 	<script>
-		var resultMode = null; //variable used to determine what query result mode application is in for next/prev
 		updateTable(); //Table is always shown when page is loaded
 	
 		//SPARQL INSERT SCRIPT
 	    async function recordGen() {
+			await setLimit() ;
 			showSpinner() ;
 		    var subject = validateSubject() ;
 			var predicate = validatePredicate() ;
 			var object = await validateObject() ; // insert function awaits object value before proceeding
 			var graph = document.getElementById("docNameID").value ;
 	
-		    //SPARQL INSERT Generator
+		    //SPARQL INSERT Query Generator
 		    var insert_cmd = 
 			"PREFIX schema: <http://schema.org/>\n" 
 			+ "PREFIX : <" + graph + "#>\n" 
@@ -939,18 +1006,20 @@
 				hideSpinner() ;
 				console.error('Insert Failed', e) ;
 				alert('Insert Failed ' + e)
-			}			     
+			}		
+			await setTableSize() ;     
 		}
 	
      	//SPARQL DELETE SCRIPT
 	   	async function recordDel() {
+			await setLimit() ;
 			showSpinner() ;
      	    var subject = validateSubject() ;
      	    var predicate = validatePredicate() ;
      		var object = nonvalidatedObject() ;
      		var graph = document.getElementById("docNameID").value ;
 
-     	    //SPARQL DELETE Generator
+     	    //SPARQL DELETE Query Generator
     		var delete_cmd = 
    			"PREFIX : <" + graph + "#>\n" 
     		+ "DELETE { GRAPH <" + graph + "> {\n"
@@ -995,7 +1064,7 @@
 				console.error('Delete Failed', e) ;
 				alert('Delete Failed ' + e)
 			}
-		
+			await setTableSize() ;
 	   	}
 		
 		/* Generates blank node queries and displays table reflecting them.
@@ -1003,7 +1072,7 @@
 		require n number of columns. */
 		async function bnQueryGen() {
 			resultMode = "bn" ;
-			limit = getLimit() ;
+			await setLimit() ;
 			showSpinner() ;
 		    var subject = validateSubject() ;
 			var predicate = validatePredicate() ;
@@ -1098,13 +1167,13 @@
 				console.error('Query Failed', e) ;
 				alert('Query Failed ' + e)
 			}		   
-			
+			await setTableSize() ;
 		}
 	
 		// This function updates table to show results of a query
 		async function queryGen() {
-			resultMode = "query"
-			limit = getLimit() ;
+			resultMode = "query" ;
+			await setLimit() ;
 			showSpinner() ;
 		    var subject = validateSubject() ;
 			var predicate = validatePredicate() ;
@@ -1219,41 +1288,42 @@
 				hideSpinner() ;
 				console.error('Query Failed', e) ;
 				alert('Query Failed ' + e)
-			}		   
+			}	
+			await setTableSize() ;
 		}
 	
 		// This function fetches the query results and returns them in json
 	    async function updateTable() {
-			resultMode = "all"
-			limit = getLimit() ;
+			resultMode = "all" ;
+			await setLimit() ;
 			showSpinner() ;
 			var graph = checkValue("docNameID", "docNameID2") ;
 			
 			if (document.getElementById('dbmsTabID').getAttribute('class') == "active") {
-			    var query = 
+			    var data_query = 
 				"SELECT DISTINCT * FROM <" + graph + "> WHERE {?subject ?predicate ?object}"
 				+ "\n" + "OFFSET " + offset + "\n"
 				+ "LIMIT " + limit
 			} else if (document.getElementById('fsTabID').getAttribute('class') == "active") {
 				// Use of Sponger Pragma to force document reload during query evaluation
-				var query = 
+				var data_query = 
 				"DEFINE get:soft" + " " + '"soft"' + "\n" + "SELECT DISTINCT * FROM <" + graph + "> WHERE {?subject ?predicate ?object}"
 				+ "\n" + "OFFSET " + offset + "\n"
 				+ "LIMIT " + limit
 			}
 			
 			if (document.getElementById("riID").checked == true) {// if reasoning and inference is on
-				query = "DEFINE input:same-as" + '"yes" \n' + query ;
+				data_query = "DEFINE input:same-as" + '"yes" \n' + data_query ;
 			} else if (document.getElementById("ruleNameID").checked == true) {
-				query = "DEFINE input:inference" + ' ' + "'" + document.getElementById("infRuleNameID").value + "'" + ' \n' + query ;
+				data_query = "DEFINE input:inference" + ' ' + "'" + document.getElementById("infRuleNameID").value + "'" + ' \n' + data_query ;
 			}
 
             var endpoint = checkValue("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;
-	        let url = endpoint + encodeURIComponent(query) + "&should-sponge=&format=application%2Fsparql-results%2Bjson" ;
+	        let url = endpoint + encodeURIComponent(data_query) + "&should-sponge=&format=application%2Fsparql-results%2Bjson" ;
 
 			if (document.getElementById("cmdID").checked == true) {
 		        console.log("Retrieving Table Data From: " + url);
-				console.log("Query: " + query);
+				console.log("Query: " + data_query);
 			}
 	        
 		
@@ -1325,64 +1395,8 @@
 				hideSpinner() ;
 				console.error('Table Refresh Failed', e) ;
 				alert('Table Refresh Failed ' + e);
-			}		  
-	    }
-
-		// This gets the size of the table
-	    async function getNumResults() {
-			var graph = checkValue("docNameID", "docNameID2") ;
-			
-			if (document.getElementById('dbmsTabID').getAttribute('class') == "active") {
-			    var query = 
-				"SELECT DISTINCT COUNT(*) AS ?count FROM <" + graph + "> WHERE {?subject ?predicate ?object}"
-			} else if (document.getElementById('fsTabID').getAttribute('class') == "active") {
-				// Use of Sponger Pragma to force document reload during query evaluation
-				var query = 
-				"DEFINE get:soft" + " " + '"soft"' + "\n" + "SELECT DISTINCT COUNT(*) AS ?count FROM <" + graph + "> WHERE {?subject ?predicate ?object}"
-			}
-			
-			if (document.getElementById("riID").checked == true) {// if reasoning and inference is on
-				query = "DEFINE input:same-as" + '"yes" \n' + query ;
-			} else if (document.getElementById("ruleNameID").checked == true) {
-				query = "DEFINE input:inference" + ' ' + "'" + document.getElementById("infRuleNameID").value + "'" + ' \n' + query ;
-			}
-
-            var endpoint = checkValue("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;
-	        let url = endpoint + encodeURIComponent(query) + "&should-sponge=&format=application%2Fsparql-results%2Bjson" ;
-
-			if (document.getElementById("cmdID").checked == true) {
-		        console.log("Retrieving Table Length From: " + url);
-				console.log("Query: " + query);
-			}
-	        
-		
-	        const options = {
-	                            method: 'GET',
-	                            headers: {
-	                                       'Content-type': 'application/sparql-results+json; charset=UTF-8',
-										 },
-	                            credentials: 'include',
-	                            mode: 'cors',
-	                            crossDomain: true,
-	                        };
-			
-			try {
-		        var resp = await fetch(url,options)
-	
-				.then((res) => res.json())
-		        .then( data =>{
-					
-		            if (data.results.bindings.length > 0){
-						tableLen = data.results.bindings[0].count.value ;
-		            } else{
-						console.log("Table size is 0");
-		            }
-				})	
-			} catch(e) {
-				hideSpinner() ;
-				console.error('Table Size Failed', e) ;
-				alert('Table Size Failed ' + e);
 			}	
+			await setTableSize() ;	  
 	    }
 	
 		// This function gets the range of the predicate to determine if object is a literal or a reference
@@ -1437,6 +1451,7 @@
 		}
 	
 		async function turtleGen() {
+			await setLimit() ;
 			showSpinner() ;
 		    var subject = validateSubject() ;
 			var predicate = validatePredicate() ;
@@ -1479,10 +1494,12 @@
 				hideSpinner() ;
 				console.error('Insert Failed ' + e) ;
 				alert('Insert Failed ' + e)
-			}			
+			}
+			await setTableSize() ;		
 		}
 		
 		async function turtleDel() {
+			await setLimit() ;
 			showSpinner() ;
 		    var subject = validateSubject() ;
 			var predicate = validatePredicate() ;
@@ -1524,7 +1541,8 @@
 				hideSpinner() ;
 				console.error('Request Failed ' + e) ;
 				alert('Delete Failed ' + e)
-			}			
+			}		
+			await setTableSize() ;	
 		}
 	</script>
 	

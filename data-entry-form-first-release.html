@@ -807,7 +807,6 @@
 			var nextButton = checkId("nextBtnID", "nextBtnID2") ;
 			var prevButton = checkId("prevBtnID", "prevBtnID2") ;
 			var remainder = tableSize - limit ;
-			console.log("Number of Records: " + tableSize) ;
 			
 			if (offset < remainder) { // if there is a next page
 				offset += parseInt(limit) ;
@@ -829,7 +828,6 @@
 			var nextButton = checkId("nextBtnID", "nextBtnID2") ;
 			var prevButton = checkId("prevBtnID", "prevBtnID2") ;
 			var remainder = tableSize - limit ;
-			console.log("Number of Records: " + tableSize) ;
 			
 			if (offset > 0) { // if there is a previous page
 				offset -= parseInt(limit) ;
@@ -850,7 +848,6 @@
 		function first() {
 			var firstButton = checkId("firstBtnID", "firstBtnID2") ;
 			var prevButton = checkId("prevBtnID", "prevBtnID2") ;
-			console.log("Number of Records: " + tableSize) ;
 			
 			if (offset > 0) {
 				offset = Number("0") ;
@@ -877,7 +874,6 @@
 			var nextButton = checkId("nextBtnID", "nextBtnID2") ;
 			var division = Math.floor(tableSize/limit) ; 
 			var remainder = division * limit ;
-			console.log("Number of Records: " + tableSize) ;
 			
 			if (offset < remainder) {
 				offset = Number(remainder) ;

@@ -807,6 +807,7 @@
 			var nextButton = checkId("nextBtnID", "nextBtnID2") ;
 			var prevButton = checkId("prevBtnID", "prevBtnID2") ;
 			var remainder = tableSize - limit ;
+			console.log("Number of Records: " + tableSize) ;
 			
 			if (offset < remainder) { // if there is a next page
 				offset += parseInt(limit) ;
@@ -828,6 +829,7 @@
 			var nextButton = checkId("nextBtnID", "nextBtnID2") ;
 			var prevButton = checkId("prevBtnID", "prevBtnID2") ;
 			var remainder = tableSize - limit ;
+			console.log("Number of Records: " + tableSize) ;
 			
 			if (offset > 0) { // if there is a previous page
 				offset -= parseInt(limit) ;
@@ -848,6 +850,7 @@
 		function first() {
 			var firstButton = checkId("firstBtnID", "firstBtnID2") ;
 			var prevButton = checkId("prevBtnID", "prevBtnID2") ;
+			console.log("Number of Records: " + tableSize) ;
 			
 			if (offset > 0) {
 				offset = Number("0") ;
@@ -872,7 +875,9 @@
 		function last() {
 			var lastButton = checkId("lastBtnID", "lastBtnID2") ;
 			var nextButton = checkId("nextBtnID", "nextBtnID2") ;
-			var remainder = tableSize - limit ;
+			var division = Math.floor(tableSize/limit) ; 
+			var remainder = division * limit ;
+			console.log("Number of Records: " + tableSize) ;
 			
 			if (offset < remainder) {
 				offset = Number(remainder) ;
@@ -1007,7 +1012,8 @@
 				console.error('Insert Failed', e) ;
 				alert('Insert Failed ' + e)
 			}		
-			await setTableSize() ;     
+			await setTableSize() ;   
+			await buttonDisplay() ;  
 		}
 	
      	//SPARQL DELETE SCRIPT
@@ -1065,6 +1071,7 @@
 				alert('Delete Failed ' + e)
 			}
 			await setTableSize() ;
+			await buttonDisplay() ;  
 	   	}
 		
 		/* Generates blank node queries and displays table reflecting them.
@@ -1168,6 +1175,7 @@
 				alert('Query Failed ' + e)
 			}		   
 			await setTableSize() ;
+			await buttonDisplay() ;  
 		}
 	
 		// This function updates table to show results of a query
@@ -1290,6 +1298,7 @@
 				alert('Query Failed ' + e)
 			}	
 			await setTableSize() ;
+			await buttonDisplay() ;  
 		}
 	
 		// This function fetches the query results and returns them in json
@@ -1396,7 +1405,8 @@
 				console.error('Table Refresh Failed', e) ;
 				alert('Table Refresh Failed ' + e);
 			}	
-			await setTableSize() ;	  
+			await setTableSize() ;	
+			await buttonDisplay() ;    
 	    }
 	
 		// This function gets the range of the predicate to determine if object is a literal or a reference
@@ -1496,6 +1506,7 @@
 				alert('Insert Failed ' + e)
 			}
 			await setTableSize() ;		
+			await buttonDisplay() ;  
 		}
 		
 		async function turtleDel() {
@@ -1543,6 +1554,7 @@
 				alert('Delete Failed ' + e)
 			}		
 			await setTableSize() ;	
+			await buttonDisplay() ;  
 		}
 	</script>
 	

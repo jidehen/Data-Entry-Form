@@ -872,12 +872,19 @@
 		function last() {
 			var lastButton = checkId("lastBtnID", "lastBtnID2") ;
 			var nextButton = checkId("nextBtnID", "nextBtnID2") ;
-			var division = Math.floor(tableSize/limit) ; 
-			var remainder = division * limit ;
+			var div = Math.floor(tableSize / limit) ;
+			var mod = Math.floor(tableSize % limit) ;
+			if (mod != 0) {
+				console.log("CASE 1")
+				var remainder = tableSize - mod ;
+			} else { // if limit even divides into tableSize
+				console.log("CASE 2")
+				var remainder = (div - 1) * limit
+			}
 			
 			if (offset < remainder) {
 				offset = Number(remainder) ;
-			
+				
 				// refresh table
 				if (resultMode == "bn") {
 					bnQueryGen() ;

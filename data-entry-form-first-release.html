@@ -59,6 +59,19 @@
 				  <label style="font-weight: normal" for="resultsID">Results per Page:</label>
 				  <input type="text" style="max-width: 250px" value="5" id="resultsID">
 			  </div>
+			  <h5> Return Data As: </h4>
+			  <!-- Default Download Type -->
+			  <div class="radio">
+			    <label><input id="defaultID" type="radio" name="radiogroup" checked>Default (JSON)</label>
+			  </div>
+  			  <!-- CSV Download Checkbox  -->
+			  <div class="radio">
+			    <label><input id="csvID" type="radio" name="radiogroup">CSV</label>
+			  </div>
+  			  <!-- XML Download Checkbox  -->
+			  <div class="radio">
+			    <label><input id="xmlID" type="radio" name="radiogroup">XML</label>
+			  </div>
 		    </ul>
 		  </li>
 		  <!-- End Dropdown -->
@@ -1076,6 +1089,45 @@
 			await setTableSize() ;
 			await buttonDisplay() ;  
 	   	}
+
+		// function used to return data as CSV or XML
+		function downloadResults() {
+			var graph = checkValue("docNameID", "docNameID2") ;
+			
+			if (document.getElementById('dbmsTabID').getAttribute('class') == "active") {
+			    var data_query = 
+				"SELECT DISTINCT * FROM <" + graph + "> WHERE {?subject ?predicate ?object}"
+			} else if (document.getElementById('fsTabID').getAttribute('class') == "active") {
+				// Use of Sponger Pragma to force document reload during query evaluation
+				var data_query = 
+				"DEFINE get:soft" + " " + '"soft"' + "\n" + "SELECT DISTINCT * FROM <" + graph + "> WHERE {?subject ?predicate ?object}"
+			}
+			
+			if (limit >= 1) { // if results per page is active
+				data_query = data_query + "\n" + "OFFSET " + offset + "\n" + "LIMIT " + limit ;
+			} 
+			
+			if (document.getElementById("riID").checked == true) {// if reasoning and inference is on
+				data_query = "DEFINE input:same-as" + '"yes" \n' + data_query ;
+			} else if (document.getElementById("ruleNameID").checked == true) {
+				data_query = "DEFINE input:inference" + ' ' + "'" + document.getElementById("infRuleNameID").value + "'" + ' \n' + data_query ;
+			}
+
+            var endpoint = checkValue("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;
+			if (document.getElementById("csvID").checked == true) {
+		        var downloadURL = endpoint + encodeURIComponent(data_query) + "&should-sponge=&format=text%2Fcsv" ;
+			} else if (document.getElementById("xmlID").checked == true) {
+				var downloadURL = endpoint + encodeURIComponent(data_query) + "&should-sponge=&format=application%2Fsparql-results%2Bxml" ;
+			}
+	        
+			
+			if (document.getElementById("cmdID").checked == true) {
+		        console.log("Retrieving CSV From: " + downloadURL);
+				console.log("Query: " + data_query);
+			}
+			
+			window.open(downloadURL) ;
+		}
 		
 		/* Generates blank node queries and displays table reflecting them.
 		This function is required because blank node queries can 
@@ -1115,6 +1167,10 @@
 				query = "DEFINE input:inference" + ' ' + "'" + document.getElementById("infRuleNameID").value + "'" + ' \n' + query ;
 			}
 			
+			// CSV download
+			if (document.getElementById("csvID").checked == true || document.getElementById("xmlID").checked == true) {
+		        await downloadResults() ;
+			}
 			
 			var endpoint = checkValue("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;
 	        let url = endpoint + encodeURIComponent(query) + "&should-sponge=&format=application%2Fsparql-results%2Bjson" ;
@@ -1219,6 +1275,11 @@
 				query = "DEFINE input:same-as" + '"yes" \n' + query ;
 			} else if (document.getElementById("ruleNameID").checked == true) {
 				query = "DEFINE input:inference" + ' ' + "'" + document.getElementById("infRuleNameID").value + "'" + ' \n' + query ;
+			}
+			
+			// CSV download
+			if (document.getElementById("csvID").checked == true || document.getElementById("xmlID").checked == true) {
+		        await downloadResults() ;
 			}
 			
 			var endpoint = checkValue("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;
@@ -1328,6 +1389,11 @@
 				data_query = "DEFINE input:same-as" + '"yes" \n' + data_query ;
 			} else if (document.getElementById("ruleNameID").checked == true) {
 				data_query = "DEFINE input:inference" + ' ' + "'" + document.getElementById("infRuleNameID").value + "'" + ' \n' + data_query ;
+			}
+			
+			// CSV download
+			if (document.getElementById("csvID").checked == true || document.getElementById("xmlID").checked == true) {
+		        await downloadResults() ;
 			}
 
             var endpoint = checkValue("endpointID", "endpointID2") + "?default-graph-uri=&query=" ;

@@ -193,10 +193,11 @@
 		  					<div class=button-wrapper>
 		  					<span>
 							<button id="clearBtnID" type="button" onclick="clearInput()" class="btn btn-primary">Clear</button>
-							<button id="turtleBtnID2" type="button" onclick="turtleGen()" class="btn btn-success">Add</button>
-							<button id="turtleBtnID2" type="button" onclick="turtleDel()" class="btn btn-danger">Delete</button>
+							<button id="insertBtnID2" type="button" onclick="turtleGen()" class="btn btn-success">Add</button>
+							<button id="deleteBtnID2" type="button" onclick="turtleDel()" class="btn btn-danger">Delete</button>
 		  					<button id="queryBtnID2" type="button" onclick="queryGen()" class="btn btn-warning">Query</button> 
 		  					<button id="dataBtnID2" type="button" onclick="updateTable()" class="btn btn-info">All Data</button>
+							<button id="test2" type="button" class="btn btn-info">Test Btn</button>
 		  				    </span>
 		  					</div>
 		  					<!-- End Buttons -->
@@ -213,11 +214,11 @@
 		  					</div>
 		  				</table>
 						<div class="button-wrapper">
-							<button id="firstBtnID2" type="button" onclick="first()" style="background-color: #99A3A4; color: #FDFEFE; margin-right: 5px" class="btn pull-left hidden">First</button>
-							<button id="prevBtnID2" type="button" onclick="previous()" style="background-color: #99A3A4; color: #FDFEFE" class="btn pull-left hidden">Prev</button>
-							<button id="lastBtnID2" type="button" onclick="last()" style="background-color: #99A3A4; color: #FDFEFE; margin-left: 5px" class="btn pull-right hidden">Last</button>
+							<button id="firstBtnID2" type="button" onclick="first()" style="background-color: #99A3A4; color: #FDFEFE; margin-right: 5px" class="btn pull-left disabled">First</button>
+							<button id="prevBtnID2" type="button" onclick="previous()" style="background-color: #99A3A4; color: #FDFEFE" class="btn pull-left disabled">Prev</button>
+							<button id="lastBtnID2" type="button" onclick="last()" style="background-color: #99A3A4; color: #FDFEFE; margin-left: 5px" class="btn pull-right disabled">Last</button>
 							
-							<button id="nextBtnID2" type="button" onclick="next()" style="background-color: #99A3A4; color: #FDFEFE" class="btn pull-right hidden">Next</button>
+							<button id="nextBtnID2" type="button" onclick="next()" style="background-color: #99A3A4; color: #FDFEFE" class="btn pull-right disabled">Next</button>
 						</div>
 		  	        </div>
 		  			<!--Table Div End (Right Side) -->
@@ -710,6 +711,7 @@
 	
 	<!-- These functions handle the data table -->
 	<script>
+		
 		// This function allows hyperlinks to be used in the table
 		function tableFormat(str) {
 			// Regular Expression for URIs in table specifically
@@ -783,34 +785,34 @@
 			var remainder = tableSize - limit ;
 			
 			if (offset < remainder) { // if there is a next page
-				if (nextButton.classList.contains('hidden')) { // show next button
-					nextButton.classList.remove('hidden') ;
+				if (nextButton.classList.contains('disabled')) { // show next button
+					nextButton.classList.remove('disabled') ;
 				}
-				if (lastButton.classList.contains('hidden')) { // show last button
-					lastButton.classList.remove('hidden') ;
+				if (lastButton.classList.contains('disabled')) { // show last button
+					lastButton.classList.remove('disabled') ;
 				}
 			} else { // if there is not a next page
-				if (!nextButton.classList.contains('hidden')) { // hide next button
-					nextButton.classList.add('hidden') ;
+				if (!nextButton.classList.contains('disabled')) { // hide next button
+					nextButton.classList.add('disabled') ;
 				}
-				if (!lastButton.classList.contains('hidden')) { // hide last button
-					lastButton.classList.add('hidden') ;
+				if (!lastButton.classList.contains('disabled')) { // hide last button
+					lastButton.classList.add('disabled') ;
 				}
 			}
 			
 			if (offset > 0) { // if there is a previous page
-				if (prevButton.classList.contains('hidden')) { // show prev button
-					prevButton.classList.remove('hidden') ;
+				if (prevButton.classList.contains('disabled')) { // show prev button
+					prevButton.classList.remove('disabled') ;
 				}
-				if (firstButton.classList.contains('hidden')) { // show first button
-					firstButton.classList.remove('hidden') ;
+				if (firstButton.classList.contains('disabled')) { // show first button
+					firstButton.classList.remove('disabled') ;
 				}
 			} else { // if there is not a previous page
-				if (!prevButton.classList.contains('hidden')) { // hide prev button
-					prevButton.classList.add('hidden') ;
+				if (!prevButton.classList.contains('disabled')) { // hide prev button
+					prevButton.classList.add('disabled') ;
 				}
-				if (!firstButton.classList.contains('hidden')) { // hide first button
-					firstButton.classList.add('hidden') ;
+				if (!firstButton.classList.contains('disabled')) { // hide first button
+					firstButton.classList.add('disabled') ;
 				}
 			}
 		}
@@ -820,6 +822,10 @@
 			var nextButton = checkId("nextBtnID", "nextBtnID2") ;
 			var prevButton = checkId("prevBtnID", "prevBtnID2") ;
 			var remainder = tableSize - limit ;
+			
+			if (nextButton.classList.contains('disabled')) { // stop action if button is disabled
+				return false ;
+			}
 			
 			if (offset < remainder) { // if there is a next page
 				offset += parseInt(limit) ;
@@ -842,6 +848,10 @@
 			var prevButton = checkId("prevBtnID", "prevBtnID2") ;
 			var remainder = tableSize - limit ;
 			
+			if (prevButton.classList.contains('disabled')) { // stop action if button is disabled
+				return false ;
+			}
+			
 			if (offset > 0) { // if there is a previous page
 				offset -= parseInt(limit) ;
 				buttonDisplay() ;
@@ -862,6 +872,10 @@
 			var firstButton = checkId("firstBtnID", "firstBtnID2") ;
 			var prevButton = checkId("prevBtnID", "prevBtnID2") ;
 			
+			if (firstButton.classList.contains('disabled')) { // stop action if button is disabled
+				return false ;
+			}
+			
 			if (offset > 0) {
 				offset = Number("0") ;
 
@@ -876,8 +890,8 @@
 				
 				buttonDisplay() ;
 			} else {
-				if (!firstButton.classList.contains('hidden')) { // hide first button
-					firstButton.classList.add('hidden') ;
+				if (!firstButton.classList.contains('disabled')) { // hide first button
+					firstButton.classList.add('disabled') ;
 				}	
 			}
 		}
@@ -887,6 +901,11 @@
 			var nextButton = checkId("nextBtnID", "nextBtnID2") ;
 			var div = Math.floor(tableSize / limit) ;
 			var mod = Math.floor(tableSize % limit) ;
+			
+			if (lastButton.classList.contains('disabled')) { // stop action if button is disabled
+				return false ;
+			}
+			
 			if (mod != 0) {
 				console.log("CASE 1")
 				var remainder = tableSize - mod ;
@@ -909,8 +928,8 @@
 				
 				buttonDisplay() ;
 			} else {
-				if (!lastButton.classList.contains('hidden')) { // hide last button
-					lastButton.classList.add('hidden') ;
+				if (!lastButton.classList.contains('disabled')) { // hide last button
+					lastButton.classList.add('disabled') ;
 				}
 			}
 		}
@@ -1092,6 +1111,7 @@
 
 		// function used to return data as CSV or XML
 		function downloadResults() {
+			resultMode = "csv" ;
 			var graph = checkValue("docNameID", "docNameID2") ;
 			
 			if (document.getElementById('dbmsTabID').getAttribute('class') == "active") {
@@ -1536,6 +1556,7 @@
 			var predicate = validatePredicate() ;
 			var object = await validateObject() ; // insert function awaits object value before proceeding
 			var docName = document.getElementById("docNameID2").value ;
+			console.log("subject: " + subject)
 
 			var turtle_cmd = 
 			"" + "INSERT DATA {@prefix : <" + docName + "#> ." + ' ' + subject + ' ' + predicate + ' ' + object + ' ' + ".}" + ""

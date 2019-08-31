@@ -475,6 +475,7 @@
 		// Function formats literal inputs
 		function formatLiteral(str) {
 			if (langTag(str)) { // str has lang tag
+				console.log("langtag hit")
 				strArray = str.split('@') ; // split string at @ so the langtag is removed from string
 				str = strArray[0].trim() ;
 				langtag = '@' + strArray[1].trim() ; // need to add @ because it is removed by split 
@@ -485,6 +486,8 @@
 				}
 			} else { // str does not have lang tag
 				if (isBlankNode(str)) {
+					return str ;
+				} else if (str.includes("^^")) {
 					return str ;
 				} else if (str.charAt(0) == "'" && str.charAt(str.length-1) == "'") {
 					return str // If string begins and ends with single quote return it as is
@@ -497,6 +500,7 @@
 						return str ;
 					} 
 				} else {
+					console.log("case 5")
 					return '"' + str + '"' ;
 				}
 			}	
@@ -654,7 +658,7 @@
 			var range = await predicateRange() ; // function waits until range is a value rather than a promise
 			var str = checkValue("objectID", "objectID2") ;
 		
-			if (str.includes('"') || str.includes("'")) {
+			if (str.includes('"') || str.includes("'") || str.includes("^^")) {
 				range = true ;
 			}
 		
@@ -662,7 +666,6 @@
 				if (str.charAt(0) == '<' && str.charAt(str.length-1) == '>') { //Case: input is already qutoed uri. Return as is
 					return str
 				} else if (regexp.test(str) && !isBlankNode(str)) {
-					console.log("CASE 1 HIT")
 					return '<' + str + '>' ; // Case: input is a uri. Solution: quote it
 				} else if (str.charAt(0) == "#") {
 					return '<' + str + '>' ; // Case: input is an unquoted relative uri. Solution: quote it
@@ -1100,11 +1103,11 @@
     		var delete_cmd = 
    			"PREFIX : <" + graph + "#>\n" 
     		+ "DELETE { GRAPH <" + graph + "> {\n"
-    		+ subject + ' ' + predicate + ' ' + object + "."
+    		+ subject + ' ' + predicate + ' ' + object + ' ' + "."
     		+ "\n }"
    			+ "\n }"
     		+ "WHERE { GRAPH <" + graph + "> { \n"
-    		+ subject + ' ' + predicate + ' ' + object + "."
+    		+ subject + ' ' + predicate + ' ' + object + ' ' + "."
     		+ "} \n };"	
 
             var endpoint = document.getElementById("endpointID").value ;

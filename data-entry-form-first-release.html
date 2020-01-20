@@ -45,14 +45,14 @@
 			  <div class="checkbox">
 			    <label><input id="riID" type="checkbox" value="">owl:sameAs Reasoning & Inference</label>
 			  </div>
-			  <!-- Console Print Commands Checkbox  -->
-			  <div class="checkbox">
-			    <label><input id="cmdID" type="checkbox" value="">Console Log Commands</label>
-			  </div>
 			  <!-- Inference Rule Name -->
 			  <div class="checkbox">
 			    <label><input id="ruleNameID" type="checkbox" value="">Inference Rule</label> <br>
 				<input type="text" style="max-width: 250px" value="urn:ifp:inference:rule" id="infRuleNameID">
+			  </div>
+			  <!-- Console Print Commands Checkbox  -->
+			  <div class="checkbox">
+			    <label><input id="cmdID" type="checkbox" value="">Console Log Commands</label>
 			  </div>
   			  <!-- Number of Results per Page -->
 			  <div class="form-group">
@@ -142,11 +142,11 @@
 		  					</div>
 		  				</table>
 						<div class="button-wrapper">
-							<button id="firstBtnID" type="button" onclick="first()" style="background-color: #99A3A4; color: #FDFEFE; margin-right: 5px" class="btn pull-left hidden">First</button>
-							<button id="prevBtnID" type="button" onclick="previous()" style="background-color: #99A3A4; color: #FDFEFE" class="btn pull-left hidden">Prev</button>
-							<button id="lastBtnID" type="button" onclick="last()" style="background-color: #99A3A4; color: #FDFEFE; margin-left: 5px" class="btn pull-right hidden">Last</button>
+							<button id="firstBtnID" type="button" onclick="first()" style="background-color: #99A3A4; color: #FDFEFE; margin-right: 5px" class="btn pull-left">First</button>
+							<button id="prevBtnID" type="button" onclick="previous()" style="background-color: #99A3A4; color: #FDFEFE" class="btn pull-left">Prev</button>
+							<button id="lastBtnID" type="button" onclick="last()" style="background-color: #99A3A4; color: #FDFEFE; margin-left: 5px" class="btn pull-right">Last</button>
 							
-							<button id="nextBtnID" type="button" onclick="next()" style="background-color: #99A3A4; color: #FDFEFE" class="btn pull-right hidden">Next</button>
+							<button id="nextBtnID" type="button" onclick="next()" style="background-color: #99A3A4; color: #FDFEFE" class="btn pull-right ">Next</button>
 						</div>
 		  	        </div>
 		  			<!--Table Div End (Right Side) -->
@@ -213,10 +213,11 @@
 		  					</div>
 		  				</table>
 						<div class="button-wrapper">
-							<button id="firstBtnID2" type="button" onclick="first()" style="background-color: #99A3A4; color: #FDFEFE; margin-right: 5px" class="btn pull-left disabled hidden">First</button>
-							<button id="prevBtnID2" type="button" onclick="previous()" style="background-color: #99A3A4; color: #FDFEFE" class="btn pull-left disabled hidden">Prev</button>
-							<button id="lastBtnID2" type="button" onclick="last()" style="background-color: #99A3A4; color: #FDFEFE; margin-left: 5px" class="btn pull-right disabled hidden">Last</button>
-							<button id="nextBtnID2" type="button" onclick="next()" style="background-color: #99A3A4; color: #FDFEFE" class="btn pull-right disabled hidden">Next</button>
+							<button id="firstBtnID2" type="button" onclick="first()" style="background-color: #99A3A4; color: #FDFEFE; margin-right: 5px" class="btn pull-left disabled">First</button>
+							<button id="prevBtnID2" type="button" onclick="previous()" style="background-color: #99A3A4; color: #FDFEFE" class="btn pull-left disabled">Prev</button>
+							<button id="lastBtnID2" type="button" onclick="last()" style="background-color: #99A3A4; color: #FDFEFE; margin-left: 5px" class="btn pull-right disabled">Last</button>
+							
+							<button id="nextBtnID2" type="button" onclick="next()" style="background-color: #99A3A4; color: #FDFEFE" class="btn pull-right disabled">Next</button>
 						</div>
 		  	        </div>
 		  			<!--Table Div End (Right Side) -->
@@ -227,7 +228,7 @@
 		<!-- Start About Tab -->
 	    <div id="aboutID" class="tab-pane fade">
 		  	<div class="container">
-				<p style="padding-top: 10px"> Generic SPARQL Data Entry Form 2.0.0<br>
+				<p style="padding-top: 10px"> Generic SPARQL Data Entry Form 1.0.4<br>
 					Description: Simple Data Entry Form that helps unravel the power of RDF and SPARQL with regards to Structured Data creation and interaction. <br> 
 					Creator: <a href="https://jordan.solid.openlinksw.com:8444/profile/card#me">Jordan Idehen</a> (<a href="https://github.com/jidehen#this">Github</a>, <a href="https://www.linkedin.com/in/jordan-idehen-143934157/#this">LinkedIn</a>) <br>
 					Supervisor: <a href="https://github.com/OpenLinkSoftware#this">OpenLink Software</a> <br>
@@ -475,7 +476,6 @@
 		// Function formats literal inputs
 		function formatLiteral(str) {
 			if (langTag(str)) { // str has lang tag
-				console.log("langtag hit")
 				strArray = str.split('@') ; // split string at @ so the langtag is removed from string
 				str = strArray[0].trim() ;
 				langtag = '@' + strArray[1].trim() ; // need to add @ because it is removed by split 
@@ -486,8 +486,6 @@
 				}
 			} else { // str does not have lang tag
 				if (isBlankNode(str)) {
-					return str ;
-				} else if (str.includes("^^")) {
 					return str ;
 				} else if (str.charAt(0) == "'" && str.charAt(str.length-1) == "'") {
 					return str // If string begins and ends with single quote return it as is
@@ -500,7 +498,6 @@
 						return str ;
 					} 
 				} else {
-					console.log("case 5")
 					return '"' + str + '"' ;
 				}
 			}	
@@ -658,7 +655,7 @@
 			var range = await predicateRange() ; // function waits until range is a value rather than a promise
 			var str = checkValue("objectID", "objectID2") ;
 		
-			if (str.includes('"') || str.includes("'") || str.includes("^^")) {
+			if (str.includes('"') || str.includes("'")) {
 				range = true ;
 			}
 		
@@ -666,6 +663,7 @@
 				if (str.charAt(0) == '<' && str.charAt(str.length-1) == '>') { //Case: input is already qutoed uri. Return as is
 					return str
 				} else if (regexp.test(str) && !isBlankNode(str)) {
+					console.log("CASE 1 HIT")
 					return '<' + str + '>' ; // Case: input is a uri. Solution: quote it
 				} else if (str.charAt(0) == "#") {
 					return '<' + str + '>' ; // Case: input is an unquoted relative uri. Solution: quote it
@@ -673,12 +671,14 @@
 					return str ; // Case: input is already a relative uri. Solution: return it as is
 				} else if (str.includes(":")) {
 					return str; // Case: input is a curie. Solution: return it as is
-				} 
+				}
 				else {
 					return ':' + str ; // Case: input is not a uri or a blank node. Solution: make it a relative uri
 		        }
 			} 
-			else {
+			if (isBlankNode(str)){
+					return str; // Case : blank node
+			} else {
 				return formatLiteral(str);			
 	        }
 		}
@@ -702,6 +702,8 @@
 					return nonvalidatedObject(newStr) ;
 			} else if (str.includes('"') || str.includes("'") || str.indexOf(' ') >= 0) {
 				return formatLiteral(str) ; // Case: input is a quoted literal value
+			} else if (isBlankNode(str)){
+					return str; // Case : blank node
 			}
 			else {
 				return ':' + str ; // Case: input is not a uri or a blank node. Solution: make it a relative uri
@@ -713,9 +715,8 @@
 	<!-- These functions handle the data table -->
 	<script>
 		
-		// update table and buttons on tab switch
+		// update table on tab switch
 		$('.nav-tabs').find('a').on('shown.bs.tab', function () {
-			buttonDisplay() ;
 			updateTable() ;
 		});
 		
@@ -791,37 +792,6 @@
 			var lastButton = checkId("lastBtnID", "lastBtnID2") ;
 			var remainder = tableSize - limit ;
 			
-			// Table Data Check
-			if (tableSize < 1) { // if table has no data
-				if (!nextButton.classList.contains('hidden')) { // hide next button
-					nextButton.classList.add('hidden') ;
-				}
-				if (!prevButton.classList.contains('hidden')) { // hide prev button
-					prevButton.classList.add('hidden') ;
-				}
-				if (!lastButton.classList.contains('hidden')) { // hide last button
-					lastButton.classList.add('hidden') ;
-				}
-				if (!firstButton.classList.contains('hidden')) { // hide first button
-					firstButton.classList.add('hidden') ;
-				}
-				return false ;
-			} else { // if table has data
-				if (nextButton.classList.contains('hidden')) { // show next button
-					nextButton.classList.remove('hidden') ;
-				}
-				if (prevButton.classList.contains('hidden')) { // show prev button
-					prevButton.classList.remove('hidden') ;
-				}
-				if (firstButton.classList.contains('hidden')) { // show first button
-					firstButton.classList.remove('hidden') ;
-				}
-				if (lastButton.classList.contains('hidden')) { // show last button
-					lastButton.classList.remove('hidden') ;
-				}
-			}
-			
-			// Button Display
 			if (offset < remainder) { // if there is a next page
 				if (nextButton.classList.contains('disabled')) { // show next button
 					nextButton.classList.remove('disabled') ;
@@ -837,7 +807,7 @@
 					lastButton.classList.add('disabled') ;
 				}
 			}
-		
+			
 			if (offset > 0) { // if there is a previous page
 				if (prevButton.classList.contains('disabled')) { // show prev button
 					prevButton.classList.remove('disabled') ;
@@ -1032,7 +1002,6 @@
 	<!-- These Functions Handle the Functionality of the Page -->
 	<script>
 		updateTable(); //Table is always shown when page is loaded
-		buttonDisplay() ; // set up buttons
 	
 		//SPARQL INSERT SCRIPT
 	    async function recordGen() {
@@ -1103,11 +1072,11 @@
     		var delete_cmd = 
    			"PREFIX : <" + graph + "#>\n" 
     		+ "DELETE { GRAPH <" + graph + "> {\n"
-    		+ subject + ' ' + predicate + ' ' + object + ' ' + "."
+    		+ subject + ' ' + predicate + ' ' + object + "."
     		+ "\n }"
    			+ "\n }"
     		+ "WHERE { GRAPH <" + graph + "> { \n"
-    		+ subject + ' ' + predicate + ' ' + object + ' ' + "."
+    		+ subject + ' ' + predicate + ' ' + object + "."
     		+ "} \n };"	
 
             var endpoint = document.getElementById("endpointID").value ;

@@ -192,7 +192,7 @@
 		  					<!-- Start Buttons -->
 		  					<div class=button-wrapper>
 		  					<span>
-							<button id="clearBtnID" type="button" onclick="clearInput()" class="btn btn-primary">Clear</button>
+							<button id="clearBtnID2" type="button" onclick="clearInput()" class="btn btn-primary">Clear</button>
 							<button id="insertBtnID2" type="button" onclick="turtleGen()" class="btn btn-success">Add</button>
 							<button id="deleteBtnID2" type="button" onclick="turtleDel()" class="btn btn-danger">Delete</button>
 		  					<button id="queryBtnID2" type="button" onclick="queryGen()" class="btn btn-warning">Query</button> 
@@ -329,7 +329,7 @@
 		  const loginButton = document.getElementById('loginID');
 		  const logoutButton = document.getElementById('logoutID');
 
-		  solid.auth.trackSession(async (session) => {
+		  async (session) => {
 	              const loggedHref = document.getElementById('logged-href')
 	              const loggedIn = !!session
 	              loginButton.classList.toggle('hidden', loggedIn)
@@ -352,7 +352,7 @@
 	                solid_storage = null;
 	                sessionStorage.removeItem('solid_storage');
 	              }
-	            })
+	            }
 		});
 		
 		/* Gets the solid storage from window > application > session storage 
@@ -663,7 +663,7 @@
 				if (str.charAt(0) == '<' && str.charAt(str.length-1) == '>') { //Case: input is already qutoed uri. Return as is
 					return str
 				} else if (regexp.test(str) && !isBlankNode(str)) {
-					console.log("CASE 1 HIT")
+
 					return '<' + str + '>' ; // Case: input is a uri. Solution: quote it
 				} else if (str.charAt(0) == "#") {
 					return '<' + str + '>' ; // Case: input is an unquoted relative uri. Solution: quote it
@@ -714,10 +714,13 @@
 	
 	<!-- These functions handle the data table -->
 	<script>
-		
 		// update table on tab switch
-		$('.nav-tabs').find('a').on('shown.bs.tab', function () {
-			updateTable() ;
+		$('.nav-tabs a').on('shown.bs.tab', function(event){
+			var currTab = $(event.target).text();
+			var prevTab = $(event.relatedTarget).text();
+			if (currTab != "About" && prevTab != "About") {
+				updateTable() ;
+			}
 		});
 		
 		// This function allows hyperlinks to be used in the table
@@ -915,10 +918,8 @@
 			}
 			
 			if (mod != 0) {
-				console.log("CASE 1")
 				var remainder = tableSize - mod ;
 			} else { // if limit even divides into tableSize
-				console.log("CASE 2")
 				var remainder = (div - 1) * limit
 			}
 			

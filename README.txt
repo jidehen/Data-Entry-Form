@@ -1,9 +1,9 @@
 Overview:
-A basic data entry form that allows data to be created, manipulated, deleted and viewed in a Database Management System or File System.
+A basic data entry form that allows data to be created, manipulated, deleted , updated ,and viewed in a Database Management System or File System.
 
 VALID INPUT REQUIREMENTS:
 	- Relative URIs (scoped to Document Name field value) are presumed for single word values entered into any of the input files.
-	- CURIES are accepted, if targeting a Virtuoso instance based on the fact that it has preloaded namespaces per DBMS instance.
+	- CURIES are accepted, if targeting a Virtual  instance based on the fact that it has preloaded namespaces per DBMS instance.
 
 Subject Field Values
 	- Must be a reference (uri) or blank node (cannot be a literal value)
@@ -28,6 +28,6 @@ Object Field Values
 		- Accepted inputs: _:{blank-node} or {<predicate> <object>}, [<predicate> <object>]
 	
 LANGUAGE TAGS:
-	- Language tags must be associated with a quoted word or phrase 
+	- Language tags must be associated with a quoted word or phrase and symbols 
 		- Accepted: "{something}"@en
 		- Not Accepted: {something}@en
